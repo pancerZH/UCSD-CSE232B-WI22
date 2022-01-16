@@ -13,49 +13,51 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface ExpressionGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link ExpressionGrammarParser#prog}.
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#ap}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProg(ExpressionGrammarParser.ProgContext ctx);
+	T visitAp(ExpressionGrammarParser.ApContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Expr_Number}
-	 * labeled alternative in {@link ExpressionGrammarParser#exp}.
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#rp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpr_Number(ExpressionGrammarParser.Expr_NumberContext ctx);
+	T visitRp(ExpressionGrammarParser.RpContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Expr_Binary}
-	 * labeled alternative in {@link ExpressionGrammarParser#exp}.
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#filter}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpr_Binary(ExpressionGrammarParser.Expr_BinaryContext ctx);
+	T visitFilter(ExpressionGrammarParser.FilterContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Expr_Variable}
-	 * labeled alternative in {@link ExpressionGrammarParser#exp}.
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#doc}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpr_Variable(ExpressionGrammarParser.Expr_VariableContext ctx);
+	T visitDoc(ExpressionGrammarParser.DocContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Expr_Parentheses}
-	 * labeled alternative in {@link ExpressionGrammarParser#exp}.
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#tagName}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExpr_Parentheses(ExpressionGrammarParser.Expr_ParenthesesContext ctx);
+	T visitTagName(ExpressionGrammarParser.TagNameContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ExpressionGrammarParser#number}.
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#text}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNumber(ExpressionGrammarParser.NumberContext ctx);
+	T visitText(ExpressionGrammarParser.TextContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ExpressionGrammarParser#variable}.
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#attName}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVariable(ExpressionGrammarParser.VariableContext ctx);
+	T visitAttName(ExpressionGrammarParser.AttNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#comp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComp(ExpressionGrammarParser.CompContext ctx);
 }

@@ -19,47 +19,54 @@ public class ExpressionGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T>
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitProg(ExpressionGrammarParser.ProgContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAp(ExpressionGrammarParser.ApContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpr_Number(ExpressionGrammarParser.Expr_NumberContext ctx) { return visitChildren(ctx); }
+	@Override public T visitRp(ExpressionGrammarParser.RpContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpr_Binary(ExpressionGrammarParser.Expr_BinaryContext ctx) { return visitChildren(ctx); }
+	@Override public T visitFilter(ExpressionGrammarParser.FilterContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpr_Variable(ExpressionGrammarParser.Expr_VariableContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDoc(ExpressionGrammarParser.DocContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExpr_Parentheses(ExpressionGrammarParser.Expr_ParenthesesContext ctx) { return visitChildren(ctx); }
+	@Override public T visitTagName(ExpressionGrammarParser.TagNameContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitNumber(ExpressionGrammarParser.NumberContext ctx) { return visitChildren(ctx); }
+	@Override public T visitText(ExpressionGrammarParser.TextContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitVariable(ExpressionGrammarParser.VariableContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAttName(ExpressionGrammarParser.AttNameContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitComp(ExpressionGrammarParser.CompContext ctx) { return visitChildren(ctx); }
 }
