@@ -1,4 +1,4 @@
-package edu.ucsd.cse232b.Xpath;
+package edu.ucsd.cse232b.xpath;
 
 import edu.ucsd.CSE232B.parsers.ExpressionGrammarBaseVisitor;
 import edu.ucsd.CSE232B.parsers.ExpressionGrammarParser;
