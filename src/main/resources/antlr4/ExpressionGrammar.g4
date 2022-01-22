@@ -4,54 +4,38 @@ grammar ExpressionGrammar ;
 package edu.ucsd.CSE232B.parsers;
 }
 
-///*Rules*/
-//prog :	(exp)+  EOF;
-//exp:	exp OP exp      #Expr_Binary
-//    |	number          #Expr_Number
-//    |   variable        #Expr_Variable
-//    |	LPR exp RPR     #Expr_Parentheses
-//    ;
-//number:
-// NUM
-//;
-//variable:
-//ID
-//;
-//
-///*Tokens*/
-//LPR: '(';
-//RPR: ')';
-//OP : ('*'|'/' | '+');
-//ID : [a-zA-Z][a-zA-Z_0-9]*;
-//NUM :  '0' | '-'?[1-9][0-9]* ;
-//WS: [ \t\n\r]+ -> skip;
-
 /*Rules*/
-ap: doc SL rp EOF
-| doc DSL rp EOF;
-rp: tagName | STAR | SL | DSL | text | attName
-| LPR rp RPR | rp SL rp | rp DSL rp | rp LSB filter RSB | rp COMMA rp;
-filter: rp | rp comp rp | rp EQS StringConstant
-| LPR filter RPR | filter CONJ filter | NEG filter;
+ap: doc pathOp rp;
+rp: tagName #UnaryRp1 | attName #UnaryRp2| TEXT #UnaryRp3| STAR #UnaryRp4| SELF #UnaryRp5| PENT #UnaryRp6
+    | rp pathOp rp #BinaryRp1| rp COMMA rp #BinaryRp2
+    | LPR rp RPR  #ParaRp
+    | rp LSB filter RSB #FilterRp;
+filter: rp #UnaryFt
+    | rp compOp rp #BinaryFt1 | rp EQS StringConstant #BinaryFt2
+    | LPR filter RPR #ParaFt
+    | filter CONJ filter #CompoundFt
+    | NEG filter #NegFt;
+
+pathOp:
+SL | DSL;
 
 doc:
-StringConstant;
+DOC LPR DQ StringConstant DQ RPR; // TODO: https://canvas.ucsd.edu/courses/32790/discussion_topics/406595
 
 tagName:
 StringConstant;
 
-text:
-StringConstant;
-
 attName:
-StringConstant;
+AT StringConstant;
 
-comp:
+compOp:
 EQS | EQ | ISS | IS;
 
 /*Tokens*/
 SL: '/';
 DSL: '//';
+SELF: '.';
+PENT: '..';
 STAR: '*';
 LPR: '(';
 RPR: ')';
@@ -64,6 +48,10 @@ ISS: '==';
 IS: 'is';
 NEG: 'not';
 CONJ: ('and' | 'or');
+TEXT: 'text()';
+AT: '@';
+DOC: 'doc';
+DQ: '"';
 StringConstant: [a-zA-Z_0-9.]+; // TODO: Loose restriction.
 WS: [ \t\n\r]+ -> skip;
 
