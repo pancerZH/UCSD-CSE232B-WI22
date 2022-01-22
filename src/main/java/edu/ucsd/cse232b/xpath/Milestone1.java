@@ -4,7 +4,7 @@ import org.w3c.dom.Node;
 
 import java.util.List;
 
-public class milestone1 {
+public class Milestone1 {
     public static void main(String[] args) throws Exception {
 //        if(args.length != 1) {
 //            throw new Exception("No specified input file");
