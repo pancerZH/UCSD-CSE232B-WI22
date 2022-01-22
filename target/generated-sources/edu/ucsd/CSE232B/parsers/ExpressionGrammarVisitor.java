@@ -19,17 +19,123 @@ public interface ExpressionGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAp(ExpressionGrammarParser.ApContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ExpressionGrammarParser#rp}.
+	 * Visit a parse tree produced by the {@code UnaryRp3}
+	 * labeled alternative in {@link ExpressionGrammarParser#rp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRp(ExpressionGrammarParser.RpContext ctx);
+	T visitUnaryRp3(ExpressionGrammarParser.UnaryRp3Context ctx);
 	/**
-	 * Visit a parse tree produced by {@link ExpressionGrammarParser#filter}.
+	 * Visit a parse tree produced by the {@code BinaryRp1}
+	 * labeled alternative in {@link ExpressionGrammarParser#rp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFilter(ExpressionGrammarParser.FilterContext ctx);
+	T visitBinaryRp1(ExpressionGrammarParser.BinaryRp1Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnaryRp4}
+	 * labeled alternative in {@link ExpressionGrammarParser#rp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryRp4(ExpressionGrammarParser.UnaryRp4Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParaRp}
+	 * labeled alternative in {@link ExpressionGrammarParser#rp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParaRp(ExpressionGrammarParser.ParaRpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BinaryRp2}
+	 * labeled alternative in {@link ExpressionGrammarParser#rp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryRp2(ExpressionGrammarParser.BinaryRp2Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnaryRp1}
+	 * labeled alternative in {@link ExpressionGrammarParser#rp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryRp1(ExpressionGrammarParser.UnaryRp1Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnaryRp2}
+	 * labeled alternative in {@link ExpressionGrammarParser#rp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryRp2(ExpressionGrammarParser.UnaryRp2Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code FilterRp}
+	 * labeled alternative in {@link ExpressionGrammarParser#rp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFilterRp(ExpressionGrammarParser.FilterRpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnaryRp5}
+	 * labeled alternative in {@link ExpressionGrammarParser#rp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryRp5(ExpressionGrammarParser.UnaryRp5Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnaryRp6}
+	 * labeled alternative in {@link ExpressionGrammarParser#rp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryRp6(ExpressionGrammarParser.UnaryRp6Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BinaryFt1}
+	 * labeled alternative in {@link ExpressionGrammarParser#filter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryFt1(ExpressionGrammarParser.BinaryFt1Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BinaryFt2}
+	 * labeled alternative in {@link ExpressionGrammarParser#filter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryFt2(ExpressionGrammarParser.BinaryFt2Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParaFt}
+	 * labeled alternative in {@link ExpressionGrammarParser#filter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParaFt(ExpressionGrammarParser.ParaFtContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NegFt}
+	 * labeled alternative in {@link ExpressionGrammarParser#filter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNegFt(ExpressionGrammarParser.NegFtContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code CompoundFt}
+	 * labeled alternative in {@link ExpressionGrammarParser#filter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCompoundFt(ExpressionGrammarParser.CompoundFtContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnaryFt}
+	 * labeled alternative in {@link ExpressionGrammarParser#filter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryFt(ExpressionGrammarParser.UnaryFtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#pathOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPathOp(ExpressionGrammarParser.PathOpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExpressionGrammarParser#doc}.
 	 * @param ctx the parse tree
@@ -43,21 +149,15 @@ public interface ExpressionGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTagName(ExpressionGrammarParser.TagNameContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ExpressionGrammarParser#text}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitText(ExpressionGrammarParser.TextContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link ExpressionGrammarParser#attName}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAttName(ExpressionGrammarParser.AttNameContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ExpressionGrammarParser#comp}.
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#compOp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitComp(ExpressionGrammarParser.CompContext ctx);
+	T visitCompOp(ExpressionGrammarParser.CompOpContext ctx);
 }
