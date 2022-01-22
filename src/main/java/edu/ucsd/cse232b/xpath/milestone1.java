@@ -1,4 +1,4 @@
-package edu.ucsd.cse232b.Xpath;
+package edu.ucsd.cse232b.xpath;
 
 import org.w3c.dom.Node;
 
