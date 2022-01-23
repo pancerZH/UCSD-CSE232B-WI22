@@ -43,6 +43,7 @@ public class UnaryRp implements Expression{
                             if (childNode.getNodeType() == Node.TEXT_NODE) {
                                 result.add(childNode);
                             }
+                            break;
                         case Star:
                             result.add(childNode);
                             break;

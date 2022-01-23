@@ -2,10 +2,10 @@ package edu.ucsd.cse232b.xpath;
 
 import edu.ucsd.CSE232B.parsers.ExpressionGrammarBaseVisitor;
 import edu.ucsd.CSE232B.parsers.ExpressionGrammarParser;
-import edu.ucsd.cse232b.expression.AbsolutePath;
-import edu.ucsd.cse232b.expression.BinaryRp;
-import edu.ucsd.cse232b.expression.Expression;
-import edu.ucsd.cse232b.expression.UnaryRp;
+import edu.ucsd.cse232b.expression.*;
+
+import static edu.ucsd.cse232b.expression.BinaryFt.compFromString;
+import static edu.ucsd.cse232b.expression.CompoundFt.conjFromString;
 
 public class ExpressionBuilder extends ExpressionGrammarBaseVisitor<Expression> {
 
@@ -37,7 +37,8 @@ public class ExpressionBuilder extends ExpressionGrammarBaseVisitor<Expression> 
 
     @Override
     public Expression visitParaRp(ExpressionGrammarParser.ParaRpContext ctx) {
-        return super.visitParaRp(ctx);
+        Expression rp = visit(ctx.rp());
+        return new ParaRp(rp);
     }
 
     @Override
@@ -60,7 +61,9 @@ public class ExpressionBuilder extends ExpressionGrammarBaseVisitor<Expression> 
 
     @Override
     public Expression visitFilterRp(ExpressionGrammarParser.FilterRpContext ctx) {
-        return super.visitFilterRp(ctx);
+        Expression rp = visit(ctx.rp());
+        Expression ft = visit(ctx.filter());
+        return new FilterRp(rp, ft);
     }
 
     @Override
@@ -75,31 +78,41 @@ public class ExpressionBuilder extends ExpressionGrammarBaseVisitor<Expression> 
 
     @Override
     public Expression visitBinaryFt1(ExpressionGrammarParser.BinaryFt1Context ctx) {
-        return super.visitBinaryFt1(ctx);
+        Expression rpLeft = visit(ctx.rp(0));
+        Expression rpRight = visit(ctx.rp(1));
+        BinaryFt.Comparator comp = compFromString(ctx.compOp().getText());
+        return new BinaryFt(rpLeft, rpRight, comp);
     }
 
     @Override
     public Expression visitBinaryFt2(ExpressionGrammarParser.BinaryFt2Context ctx) {
-        return super.visitBinaryFt2(ctx);
+        Expression rp = visit(ctx.rp());
+        return new BinaryConstantFt(rp, ctx.StringConstant().getText());
     }
 
     @Override
     public Expression visitParaFt(ExpressionGrammarParser.ParaFtContext ctx) {
-        return super.visitParaFt(ctx);
+        Expression ft = visit(ctx.filter());
+        return new ParaFt(ft);
     }
 
     @Override
     public Expression visitNegFt(ExpressionGrammarParser.NegFtContext ctx) {
-        return super.visitNegFt(ctx);
+        Expression ft = visit(ctx.filter());
+        return new NegFt(ft);
     }
 
     @Override
     public Expression visitCompoundFt(ExpressionGrammarParser.CompoundFtContext ctx) {
-        return super.visitCompoundFt(ctx);
+        Expression ft1 = visit(ctx.filter(0));
+        Expression ft2 = visit(ctx.filter(1));
+        CompoundFt.CONJ conj = conjFromString(ctx.CONJ().getText());
+        return new CompoundFt(ft1, ft2, conj);
     }
 
     @Override
     public Expression visitUnaryFt(ExpressionGrammarParser.UnaryFtContext ctx) {
-        return super.visitUnaryFt(ctx);
+        Expression rp = visit(ctx.rp());
+        return new UnaryFt(rp);
     }
 }
