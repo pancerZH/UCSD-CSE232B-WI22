@@ -36,30 +36,21 @@ public class CompoundFt implements Expression{
 
     @Override
     public List<Node> evaluate(List<Node> inputNodes) throws Exception {
-        List<Node> leftResult = this.ft1.evaluate(inputNodes);
         switch (this.conj) {
-            case AND:
+            case AND -> {
+                List<Node> leftResult = this.ft1.evaluate(inputNodes);  // subset of original inputNodes
                 return this.ft2.evaluate(leftResult);
-            case OR:
-                List<Node> rightResult = this.ft2.evaluate(inputNodes);
-                List<Node> resultList = new ArrayList<>(rightResult);
-                for(Node n : leftResult) {
-                    boolean shouldAdd = true;
-                    for (int i=0; i<rightResult.size(); i++) {
-                        Node m = rightResult.get(i);
-                        if (n.isSameNode(m)) {
-                            shouldAdd = false;
-                            rightResult.remove(i);
-                            break;
-                        }
-                    }
-                    if(shouldAdd) {
+            }
+            case OR -> {
+                List<Node> resultList = new ArrayList<>();
+                for (Node n : inputNodes) {
+                    if (!this.ft1.evaluate(List.of(n)).isEmpty() || !this.ft2.evaluate(List.of(n)).isEmpty()) {
                         resultList.add(n);
                     }
                 }
                 return resultList;
-            default:
-                throw new Exception("Not supported conjunction: " + this.conj);
+            }
+            default -> throw new Exception("Not supported conjunction: " + this.conj);
         }
     }
 

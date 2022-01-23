@@ -26,9 +26,12 @@ public class BinaryConstantFt implements Expression{
     @Override
     public List<Node> evaluate(List<Node> inputNodes) throws Exception {
         List<Node> resultList = new ArrayList<>();
-        for(Node n : this.leftRp.evaluate(inputNodes)) {
-            if(this.constant.equals(n.getNodeValue())) {
-                resultList.add(n);
+        for(Node n : inputNodes) {
+            for(Node m : this.filter(this.leftRp, n)) {
+                if(this.constant.equals(m.getNodeValue())) {
+                    resultList.add(n);
+                    break;
+                }
             }
         }
         return resultList;

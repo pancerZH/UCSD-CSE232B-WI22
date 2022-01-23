@@ -2,6 +2,7 @@ package edu.ucsd.cse232b.expression;
 
 import org.w3c.dom.Node;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +18,13 @@ public class UnaryFt implements Expression{
 
     @Override
     public List<Node> evaluate(List<Node> inputNodes) throws Exception {
-        return this.rp.evaluate(inputNodes);
+        List<Node> resultList = new ArrayList<>();
+        for(Node n : inputNodes) {
+            if(!this.filter(this.rp, n).isEmpty()) {
+                resultList.add(n);
+            }
+        }
+        return resultList;
     }
 
     @Override

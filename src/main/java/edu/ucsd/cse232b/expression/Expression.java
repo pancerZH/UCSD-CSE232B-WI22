@@ -5,6 +5,7 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public interface Expression {
     List<Node> evaluate(List<Node> inputNodes) throws Exception;
@@ -17,6 +18,15 @@ public interface Expression {
         } else {
             return null;
         }
+    }
+
+    /*
+    * check node one by one
+    * */
+    default List<Node> filter(Expression rp, Node inputNode) throws Exception {
+        Objects.requireNonNull(rp);
+        Objects.requireNonNull(inputNode);
+        return rp.evaluate(List.of(inputNode));
     }
 
     // TODO: Optimize to return an iterator instead of a in-memory list?
