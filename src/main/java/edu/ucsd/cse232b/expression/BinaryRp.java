@@ -3,6 +3,7 @@ package edu.ucsd.cse232b.expression;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,11 +23,11 @@ public class BinaryRp implements Expression{
         List<Node> leftResult = leftRp.evaluate(inputNodes);
         switch (op) {
             case SL:
-                return rightRp.evaluate(leftResult);
+                return new ArrayList<>(new HashSet<>(rightRp.evaluate(leftResult)));
             case DSL:
                 List<Node> rightInput = new ArrayList<>();
                 getAllDescentNodes(leftResult, rightInput);
-                return rightRp.evaluate(rightInput);
+                return new ArrayList<>(new HashSet<>(rightRp.evaluate(rightInput)));
             case COMMA:
                 boolean success = leftResult.addAll(rightRp.evaluate(inputNodes));
                 if(success) {

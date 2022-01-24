@@ -277,6 +277,18 @@ public class ExpressionGrammarBaseListener implements ExpressionGrammarListener 
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCompOp(ExpressionGrammarParser.CompOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStringCondition(ExpressionGrammarParser.StringConditionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringCondition(ExpressionGrammarParser.StringConditionContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

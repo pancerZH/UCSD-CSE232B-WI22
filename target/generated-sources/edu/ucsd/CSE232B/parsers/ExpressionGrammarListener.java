@@ -261,4 +261,14 @@ public interface ExpressionGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCompOp(ExpressionGrammarParser.CompOpContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ExpressionGrammarParser#stringCondition}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringCondition(ExpressionGrammarParser.StringConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ExpressionGrammarParser#stringCondition}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringCondition(ExpressionGrammarParser.StringConditionContext ctx);
 }

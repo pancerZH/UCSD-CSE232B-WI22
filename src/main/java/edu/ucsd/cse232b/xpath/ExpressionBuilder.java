@@ -87,7 +87,7 @@ public class ExpressionBuilder extends ExpressionGrammarBaseVisitor<Expression> 
     @Override
     public Expression visitBinaryFt2(ExpressionGrammarParser.BinaryFt2Context ctx) {
         Expression rp = visit(ctx.rp());
-        return new BinaryConstantFt(rp, ctx.StringConstant().getText());
+        return new BinaryConstantFt(rp, ctx.stringCondition().StringConstant().getText());
     }
 
     @Override

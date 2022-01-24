@@ -11,7 +11,7 @@ rp: tagName #UnaryRp1 | attName #UnaryRp2| TEXT #UnaryRp3| STAR #UnaryRp4| SELF 
     | LPR rp RPR  #ParaRp
     | rp LSB filter RSB #FilterRp;
 filter: rp #UnaryFt
-    | rp compOp rp #BinaryFt1 | rp EQS StringConstant #BinaryFt2
+    | rp compOp rp #BinaryFt1 | rp EQS stringCondition #BinaryFt2
     | LPR filter RPR #ParaFt
     | filter CONJ filter #CompoundFt
     | NEG filter #NegFt;
@@ -30,6 +30,9 @@ AT StringConstant;
 
 compOp:
 EQS | EQ | ISS | IS;
+
+stringCondition:
+DQ StringConstant DQ;
 
 /*Tokens*/
 SL: '/';

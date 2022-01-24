@@ -24,6 +24,8 @@ public class UnaryRp implements Expression{
                 result.add(n);
             } else if (type == Type.Pent) {
                 result.add(n.getParentNode());
+            } else if (type == Type.Att) {
+                result.add(n.getAttributes().getNamedItem(this.unary));
             } else {
                 NodeList childNodes = n.getChildNodes();
                 for (int i = 0; i < childNodes.getLength(); i++) {

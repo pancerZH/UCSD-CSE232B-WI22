@@ -160,4 +160,10 @@ public interface ExpressionGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCompOp(ExpressionGrammarParser.CompOpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#stringCondition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStringCondition(ExpressionGrammarParser.StringConditionContext ctx);
 }

@@ -167,4 +167,11 @@ public class ExpressionGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T>
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitCompOp(ExpressionGrammarParser.CompOpContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitStringCondition(ExpressionGrammarParser.StringConditionContext ctx) { return visitChildren(ctx); }
 }
