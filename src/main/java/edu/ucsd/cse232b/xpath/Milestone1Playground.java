@@ -14,7 +14,7 @@ public class Milestone1Playground {
         // Demo
         // testcase 1
         System.out.println("Demo testcase1:");
-        String queryPath = "doc(\"country_data.xml\")/data/country/neighbor";
+        String queryPath = "doc(\"country_data.xml\")/data/country/neighbor/@name";
         Xpath xpath = new Xpath("");
         List<Node> result = xpath.evaluate(queryPath);
         xpath.transform(result);
@@ -35,7 +35,7 @@ public class Milestone1Playground {
 
         // testcase 4
         System.out.println("Demo testcase4:");
-        queryPath = "doc(\"country_data.xml\")/data/country[neighbor/@name=\"Austria\"] [not neighbor/@name=\"Switzerland\"]]";
+        queryPath = "doc(\"country_data.xml\")/data/country[neighbor/@name=\"Austria\"] [neighbor/@name=\"Switzerland\"]]";
         result = xpath.evaluate(queryPath);
         xpath.transform(result);
     }

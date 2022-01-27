@@ -36,11 +36,6 @@ public class UnaryRp implements Expression{
                                 result.add(childNode);
                             }
                             break;
-                        case Att:
-                            if (childNode.getNodeType() == Node.ATTRIBUTE_NODE && childNode.getNodeName().equals(unary)) {
-                                result.add(childNode);
-                            }
-                            break;
                         case Text:
                             if (childNode.getNodeType() == Node.TEXT_NODE) {
                                 result.add(childNode);

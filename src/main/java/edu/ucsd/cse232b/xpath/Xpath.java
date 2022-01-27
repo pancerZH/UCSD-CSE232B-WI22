@@ -14,6 +14,7 @@ import java.util.List;
 
 import edu.ucsd.cse232b.expression.AbsolutePath;
 import edu.ucsd.cse232b.expression.Expression;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -53,6 +54,9 @@ public class Xpath {
         Transformer tf = tfFactory.newTransformer();
         tf.setOutputProperty(OutputKeys.INDENT, "yes");
         for (Node n: result) {
+            if(n instanceof Attr) {
+                n = ((Attr) n).getOwnerElement();
+            }
             tf.transform(new DOMSource(n), new StreamResult(
                     new PrintStream(System.out)));
         }
