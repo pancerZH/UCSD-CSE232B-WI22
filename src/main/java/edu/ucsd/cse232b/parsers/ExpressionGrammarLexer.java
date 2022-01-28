@@ -1,6 +1,6 @@
 // Generated from ExpressionGrammar.g4 by ANTLR 4.7.2
 
-package edu.ucsd.CSE232B.parsers;
+package edu.ucsd.cse232b.parsers;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<!DOCTYPE PLAY SYSTEM "play.dtd">
+<!DOCTYPE PLAY SYSTEM
+        "/Users/wenzhezhang/Documents/learn_how_to_learn/CSE232B/UCSD-CSE232B-WI22/src/main/resources/play.dtd">
 
 <PLAY>
 <TITLE>The Tragedy of Julius Caesar</TITLE>

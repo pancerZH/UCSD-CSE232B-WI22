@@ -8,7 +8,7 @@ public class Milestone1Test {
 
     public static void main(String[] args) throws Exception {
         String query;
-        Xpath xpath = new Xpath("");
+        Xpath xpath = new Xpath();
         List<Node> result = List.of();
 
 

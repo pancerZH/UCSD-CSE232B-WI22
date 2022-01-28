@@ -18,6 +18,7 @@ edu/ucsd/cse232b/parsers/ExpressionGrammarParser$FilterRpContext.class
 edu/ucsd/cse232b/expression/AbsolutePath.class
 edu/ucsd/cse232b/parsers/ExpressionGrammarParser$BinaryFt2Context.class
 edu/ucsd/cse232b/parsers/ExpressionGrammarParser$UnaryRp4Context.class
+edu/ucsd/cse232b/xpath/Milestone1Test.class
 edu/ucsd/cse232b/parsers/ExpressionGrammarParser$UnaryRp2Context.class
 edu/ucsd/cse232b/parsers/ExpressionGrammarParser$UnaryRp3Context.class
 edu/ucsd/cse232b/parsers/ExpressionGrammarParser$ParaRpContext.class
@@ -49,6 +50,7 @@ edu/ucsd/cse232b/parsers/ExpressionGrammarListener.class
 edu/ucsd/cse232b/parsers/ExpressionGrammarParser$FilterContext.class
 edu/ucsd/cse232b/parsers/ExpressionGrammarBaseListener.class
 edu/ucsd/cse232b/parsers/ExpressionGrammarParser$BinaryRp1Context.class
+edu/ucsd/cse232b/xpath/Main.class
 edu/ucsd/cse232b/parsers/ExpressionGrammarParser$TagNameContext.class
 edu/ucsd/cse232b/expression/Expression.class
 edu/ucsd/cse232b/parsers/ExpressionGrammarParser$ApContext.class

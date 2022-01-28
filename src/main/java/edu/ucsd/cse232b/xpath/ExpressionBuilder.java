@@ -1,7 +1,7 @@
 package edu.ucsd.cse232b.xpath;
 
-import edu.ucsd.CSE232B.parsers.ExpressionGrammarBaseVisitor;
-import edu.ucsd.CSE232B.parsers.ExpressionGrammarParser;
+import edu.ucsd.cse232b.parsers.ExpressionGrammarBaseVisitor;
+import edu.ucsd.cse232b.parsers.ExpressionGrammarParser;
 import edu.ucsd.cse232b.expression.*;
 
 import static edu.ucsd.cse232b.expression.BinaryFt.compFromString;

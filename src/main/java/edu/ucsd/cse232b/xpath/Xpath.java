@@ -8,6 +8,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +23,11 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import edu.ucsd.CSE232B.parsers.ExpressionGrammarLexer;
-import edu.ucsd.CSE232B.parsers.ExpressionGrammarParser;
+import edu.ucsd.cse232b.parsers.ExpressionGrammarLexer;
+import edu.ucsd.cse232b.parsers.ExpressionGrammarParser;
 
 public class Xpath {
-    public Xpath(String wd) throws Exception {
-        this.workingDir = wd;
+    public Xpath() throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         this.documentBuilder = dbf.newDocumentBuilder();
     }
@@ -41,7 +41,9 @@ public class Xpath {
         final Expression rootExp =expBuild.visit(tree);
 
         AbsolutePath apExp = (AbsolutePath)rootExp;
-        Document doc = documentBuilder.parse(workingDir + apExp.getDoc());
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        InputStream is = classloader.getResourceAsStream(apExp.getDoc());
+        Document doc = documentBuilder.parse(is);
 
         List<Node> inputNodes = new ArrayList<>();
         inputNodes.add(doc);
@@ -63,5 +65,4 @@ public class Xpath {
     }
 
     final private DocumentBuilder documentBuilder;
-    final private String workingDir;
 }

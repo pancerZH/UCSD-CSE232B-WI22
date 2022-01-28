@@ -15,7 +15,7 @@ public class Milestone1Playground {
         // testcase 1
         System.out.println("Demo testcase1:");
         String queryPath = "doc(\"country_data.xml\")/data/country/neighbor/@name";
-        Xpath xpath = new Xpath("");
+        Xpath xpath = new Xpath();
         List<Node> result = xpath.evaluate(queryPath);
         xpath.transform(result);
 
