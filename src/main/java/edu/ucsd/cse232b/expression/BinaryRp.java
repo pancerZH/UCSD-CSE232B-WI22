@@ -32,6 +32,7 @@ public class BinaryRp implements Expression{
                 if(success) {
                     return leftResult;
                 }
+                return null;
             default:
                 throw new Exception("Evaluation error in " + this);
         }
