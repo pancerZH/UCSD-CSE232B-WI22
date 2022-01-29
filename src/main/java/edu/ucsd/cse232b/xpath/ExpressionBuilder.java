@@ -11,10 +11,10 @@ public class ExpressionBuilder extends ExpressionGrammarBaseVisitor<Expression> 
 
     @Override
     public Expression visitAp(ExpressionGrammarParser.ApContext ctx) {
-        String docName = ctx.doc().StringConstant().getText();
+        String docName = ctx.docName().fileName().getText();
         Expression.PathOp op = Expression.opFromString(ctx.pathOp().getText());
         Expression rp = visit(ctx.rp());
-        return new AbsolutePath(docName, op, rp);
+        return new AbsolutePath(docName.substring(1, docName.length()-1), op, rp);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ExpressionBuilder extends ExpressionGrammarBaseVisitor<Expression> 
 
     @Override
     public Expression visitUnaryRp2(ExpressionGrammarParser.UnaryRp2Context ctx) {
-        return new UnaryRp(UnaryRp.Type.Att, ctx.attName().StringConstant().getText());
+        return new UnaryRp(UnaryRp.Type.Att, ctx.attName().ID().getText());
     }
 
     @Override
@@ -87,7 +87,8 @@ public class ExpressionBuilder extends ExpressionGrammarBaseVisitor<Expression> 
     @Override
     public Expression visitBinaryFt2(ExpressionGrammarParser.BinaryFt2Context ctx) {
         Expression rp = visit(ctx.rp());
-        return new BinaryConstantFt(rp, ctx.stringCondition().StringConstant().getText());
+        String stringConst = ctx.stringCondition().STRING().getText();
+        return new BinaryConstantFt(rp, stringConst.substring(1, stringConst.length()-1));
     }
 
     @Override

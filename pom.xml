@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.ucsd</groupId>
-    <artifactId>CSE232B</artifactId>
+    <artifactId>cse232b</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -25,7 +25,7 @@
     </dependencies>
 
     <build>
-        <finalName>CSE232B</finalName>
+        <finalName>cse232b</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -50,7 +50,7 @@
                             <artifactSet>
                                 <includes>
                                     <include>org.antlr:antlr4-runtime</include>
-                                    <include>edu.ucsd:CSE232B.parsers</include>
+                                    <include>edu.ucsd:cse232B.parsers</include>
                                 </includes>
                             </artifactSet>
                             <transformers>

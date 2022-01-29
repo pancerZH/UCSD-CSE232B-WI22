@@ -222,15 +222,25 @@ public interface ExpressionGrammarListener extends ParseTreeListener {
 	 */
 	void exitPathOp(ExpressionGrammarParser.PathOpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ExpressionGrammarParser#doc}.
+	 * Enter a parse tree produced by {@link ExpressionGrammarParser#docName}.
 	 * @param ctx the parse tree
 	 */
-	void enterDoc(ExpressionGrammarParser.DocContext ctx);
+	void enterDocName(ExpressionGrammarParser.DocNameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ExpressionGrammarParser#doc}.
+	 * Exit a parse tree produced by {@link ExpressionGrammarParser#docName}.
 	 * @param ctx the parse tree
 	 */
-	void exitDoc(ExpressionGrammarParser.DocContext ctx);
+	void exitDocName(ExpressionGrammarParser.DocNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ExpressionGrammarParser#fileName}.
+	 * @param ctx the parse tree
+	 */
+	void enterFileName(ExpressionGrammarParser.FileNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ExpressionGrammarParser#fileName}.
+	 * @param ctx the parse tree
+	 */
+	void exitFileName(ExpressionGrammarParser.FileNameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ExpressionGrammarParser#tagName}.
 	 * @param ctx the parse tree

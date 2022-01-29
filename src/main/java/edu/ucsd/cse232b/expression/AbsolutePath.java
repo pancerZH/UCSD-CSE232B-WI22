@@ -53,7 +53,6 @@ public class AbsolutePath implements Expression {
             getAllDescentNodes(inputNodes, rpInput);
             return rp.evaluate(rpInput);
         }
-
     }
 
     @Override
