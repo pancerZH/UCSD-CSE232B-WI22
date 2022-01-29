@@ -14,7 +14,7 @@ public class Milestone1Playground {
         // Demo
         // testcase 1
         System.out.println("Demo testcase1:");
-        String queryPath = "doc(\"country_data.xml\")/data/country/neighbor/@name";
+        String queryPath = "Doc(\"country_data.xml\")/data/country/neighbor/@name";
         Xpath xpath = new Xpath();
         List<Node> result = xpath.evaluate(queryPath);
         xpath.transform(result);
@@ -22,20 +22,26 @@ public class Milestone1Playground {
 
         // testcase 2
         System.out.println("Demo testcase2:");
-        queryPath = "doc(\"country_data.xml\")/data//year";
+        queryPath = "doC(\"country_data.xml\")/data//year";
         result = xpath.evaluate(queryPath);
         xpath.transform(result);
 
 
         // testcase 3
         System.out.println("Demo testcase3:");
-        queryPath = "doc(\"country_data.xml\")/data/country[rank/text()=\"4\"]";
+        queryPath = "dOc(\"country_data.xml\")/data/country[rank/text()=\"4\"]";
         result = xpath.evaluate(queryPath);
         xpath.transform(result);
 
         // testcase 4
         System.out.println("Demo testcase4:");
-        queryPath = "doc(\"country_data.xml\")/data/country[neighbor/@name=\"Austria\"] [neighbor/@name=\"Switzerland\"]]";
+        queryPath = "DOC(\"country_data.xml\")/data/country[neighbor/@name=\"Austria\"] [neighbor/@name=\"Switzerland\"]]";
+        result = xpath.evaluate(queryPath);
+        xpath.transform(result);
+
+        // testcase 5: handle rp duplicate
+        System.out.println("Demo testcase5:");
+        queryPath = "Doc(\"country_data.xml\")/data/country/..";
         result = xpath.evaluate(queryPath);
         xpath.transform(result);
     }

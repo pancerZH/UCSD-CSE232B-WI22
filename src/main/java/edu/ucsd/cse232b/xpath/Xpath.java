@@ -5,6 +5,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -25,11 +26,13 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import edu.ucsd.cse232b.parsers.ExpressionGrammarLexer;
 import edu.ucsd.cse232b.parsers.ExpressionGrammarParser;
+import org.w3c.dom.Text;
 
 public class Xpath {
     public Xpath() throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         this.documentBuilder = dbf.newDocumentBuilder();
+        this.documentBuilder.setEntityResolver(new MyResolver());
     }
 
     public List<Node> evaluate(String path) throws Exception {
@@ -38,7 +41,7 @@ public class Xpath {
         final ExpressionGrammarParser parser = new ExpressionGrammarParser(tokens);
         final ParserRuleContext tree = parser.ap();
         final ExpressionBuilder expBuild = new ExpressionBuilder();
-        final Expression rootExp =expBuild.visit(tree);
+        final Expression rootExp = expBuild.visit(tree);
 
         AbsolutePath apExp = (AbsolutePath)rootExp;
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -57,10 +60,13 @@ public class Xpath {
         tf.setOutputProperty(OutputKeys.INDENT, "yes");
         for (Node n: result) {
             if(n instanceof Attr) {
-                n = ((Attr) n).getOwnerElement();
+                System.out.println(n.getTextContent());
+            } else if (n instanceof Text) {
+                System.out.println(n.getTextContent());
+            } else {
+                tf.transform(new DOMSource(n), new StreamResult(
+                        new PrintStream(System.out)));
             }
-            tf.transform(new DOMSource(n), new StreamResult(
-                    new PrintStream(System.out)));
         }
     }
 

@@ -137,11 +137,17 @@ public interface ExpressionGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPathOp(ExpressionGrammarParser.PathOpContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ExpressionGrammarParser#doc}.
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#docName}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDoc(ExpressionGrammarParser.DocContext ctx);
+	T visitDocName(ExpressionGrammarParser.DocNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExpressionGrammarParser#fileName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFileName(ExpressionGrammarParser.FileNameContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExpressionGrammarParser#tagName}.
 	 * @param ctx the parse tree

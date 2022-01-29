@@ -1,11 +1,11 @@
 grammar ExpressionGrammar ;
 
 @header {
-package edu.ucsd.CSE232B.parsers;
+package edu.ucsd.cse232b.parsers;
 }
 
 /*Rules*/
-ap: doc pathOp rp;
+ap: docName pathOp rp;
 rp: tagName #UnaryRp1 | attName #UnaryRp2| TEXT #UnaryRp3| STAR #UnaryRp4| SELF #UnaryRp5| PENT #UnaryRp6
     | rp pathOp rp #BinaryRp1| rp COMMA rp #BinaryRp2
     | LPR rp RPR  #ParaRp
@@ -19,20 +19,22 @@ filter: rp #UnaryFt
 pathOp:
 SL | DSL;
 
-doc:
-DOC LPR DQ StringConstant DQ RPR; // TODO: https://canvas.ucsd.edu/courses/32790/discussion_topics/406595
+docName:
+DOC LPR fileName RPR; //https://canvas.ucsd.edu/courses/32790/discussion_topics/406595
+
+fileName: STRING;
 
 tagName:
-StringConstant;
+ID;
 
 attName:
-AT StringConstant;
+AT ID;
 
 compOp:
 EQS | EQ | ISS | IS;
 
 stringCondition:
-DQ StringConstant DQ;
+STRING;
 
 /*Tokens*/
 SL: '/';
@@ -53,8 +55,26 @@ NEG: 'not';
 CONJ: ('and' | 'or');
 TEXT: 'text()';
 AT: '@';
-DOC: 'doc';
-DQ: '"';
-StringConstant: [a-zA-Z_0-9.]+; // TODO: Loose restriction.
+DOC: [dD][oO][cC];
+ID: [a-zA-Z][a-zA-Z_0-9]*;
 WS: [ \t\n\r]+ -> skip;
-
+STRING
+:
+   '"'
+   (
+      ESCAPE
+      | ~["\\]
+   )* '"'
+   | '\''
+   (
+      ESCAPE
+      | ~['\\]
+   )* '\''
+;
+ESCAPE
+:
+   '\\'
+   (
+      ['"\\]
+   )
+;
