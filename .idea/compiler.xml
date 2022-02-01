@@ -9,8 +9,5 @@
         <module name="CSE232B" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="UCSD-CSE232B-WI22" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>
