@@ -1,5 +1,6 @@
 package edu.ucsd.cse232b.expression;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -23,6 +24,9 @@ public class UnaryRp implements Expression{
             if(type == Type.Self) {
                 result.add(n);
             } else if (type == Type.Pent) {
+                if(n instanceof Document) {
+                    continue;
+                }
                 result.add(n.getParentNode());
             } else if (type == Type.Att) {
                 result.add(n.getAttributes().getNamedItem(this.unary));

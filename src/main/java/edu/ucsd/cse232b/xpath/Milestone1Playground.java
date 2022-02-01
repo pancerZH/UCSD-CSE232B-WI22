@@ -44,5 +44,11 @@ public class Milestone1Playground {
         queryPath = "Doc(\"country_data.xml\")/data/country/..";
         result = xpath.evaluate(queryPath);
         xpath.transform(result);
+
+        // testcase 5: handle rp duplicate
+        System.out.println("Demo testcase6:");
+        queryPath = "doc(\"j_caesar.xml\")//..//*";
+        result = xpath.evaluate(queryPath);
+        xpath.transform(result);
     }
 }
