@@ -1,4 +1,4 @@
-// Generated from ExpressionGrammar.g4 by ANTLR 4.7.2
+// Generated from /Users/wenzhezhang/Documents/learn_how_to_learn/CSE232B/UCSD-CSE232B-WI22/src/main/resources/antlr4/ExpressionGrammar.g4 by ANTLR 4.9.2
 
 package edu.ucsd.cse232b.parsers;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class ExpressionGrammarParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.9.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
