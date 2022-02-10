@@ -68,7 +68,11 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
 
     @Override public Query visitForXq(QueryGrammarParser.ForXqContext ctx) { return visitChildren(ctx); }
 
-    @Override public Query visitTagXq(QueryGrammarParser.TagXqContext ctx) { return visitChildren(ctx); }
+    @Override public Query visitTagXq(QueryGrammarParser.TagXqContext ctx) {
+        String tagName = ctx.startTag().tagName().getText();
+        Query query = visit(ctx.xq());
+        return new TagXq(tagName, query);
+    }
 
     @Override public Query visitForClause(QueryGrammarParser.ForClauseContext ctx) { return visitChildren(ctx); }
 
