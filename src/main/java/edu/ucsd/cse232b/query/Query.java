@@ -1,6 +1,5 @@
 package edu.ucsd.cse232b.query;
 
-import edu.ucsd.cse232b.xpath.Xpath;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -56,5 +55,19 @@ public interface Query {
         ParaCond,
         CompoundCond,
         NegCond
+    }
+
+    enum PathOp {
+        SL, DSL
+    }
+
+    static PathOp opFromString(String s) {
+        if(s.equals("/")) {
+            return PathOp.SL;
+        } else if (s.equals("//")){
+            return PathOp.DSL;
+        } else {
+            return null;
+        }
     }
 }

@@ -1,11 +1,10 @@
 package edu.ucsd.cse232b.xquery;
 
+import edu.ucsd.cse232b.expression.Expression;
 import edu.ucsd.cse232b.parsers.QueryGrammarBaseVisitor;
 import edu.ucsd.cse232b.parsers.QueryGrammarParser;
-import edu.ucsd.cse232b.query.ApXq;
-import edu.ucsd.cse232b.query.Query;
-import edu.ucsd.cse232b.query.StringXq;
-import edu.ucsd.cse232b.query.VarXq;
+import edu.ucsd.cse232b.query.*;
+import edu.ucsd.cse232b.xpath.ExpressionBuilder;
 import edu.ucsd.cse232b.xpath.Xpath;
 import org.w3c.dom.Node;
 
@@ -19,20 +18,30 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
     private final Map<String, List<Node>> contextMap;
     private final Stack<Map<String, List<Node>>> contextStack;
     private final Xpath xpath;
+    private final ExpressionBuilder expBuilder;
 
     public QueryBuilder() throws Exception {
         this.contextMap = new HashMap<>();  // current context
         this.contextStack = new Stack<>();  // for variable scope
         this.xpath = new Xpath();
+        this.expBuilder = new ExpressionBuilder();
     }
 
-    @Override public Query visitRpXq(QueryGrammarParser.RpXqContext ctx) { return visitChildren(ctx); }
+    @Override public Query visitRpXq(QueryGrammarParser.RpXqContext ctx) {
+        Query query = visit(ctx.xq());
+        Expression exp = this.expBuilder.visit(ctx.rp());
+        Query.PathOp op = Query.opFromString(ctx.pathOp().getText());
+        return new RpXq(query, op, exp);
+    }
     
     @Override public Query visitStringXq(QueryGrammarParser.StringXqContext ctx) {
         return new StringXq(ctx.STRING().getText());
     }
 
-    @Override public Query visitParaXq(QueryGrammarParser.ParaXqContext ctx) { return visitChildren(ctx); }
+    @Override public Query visitParaXq(QueryGrammarParser.ParaXqContext ctx) {
+        Query query = visit(ctx.xq());
+        return new ParaXq(query);
+    }
 
     @Override public Query visitApXq(QueryGrammarParser.ApXqContext ctx) {
         List<Node> list = null;
@@ -45,7 +54,11 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
         return new ApXq(list);
     }
 
-    @Override public Query visitBinaryXq(QueryGrammarParser.BinaryXqContext ctx) { return visitChildren(ctx); }
+    @Override public Query visitBinaryXq(QueryGrammarParser.BinaryXqContext ctx) {
+        Query query1 = visit(ctx.xq(0));
+        Query query2 = visit(ctx.xq(1));
+        return new BinaryXq(query1, query2);
+    }
 
     @Override public Query visitVarXq(QueryGrammarParser.VarXqContext ctx) {
         return new VarXq(this.contextMap, ctx.VAR().getText());
