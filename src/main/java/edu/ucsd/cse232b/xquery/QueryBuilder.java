@@ -82,23 +82,51 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
 
     @Override public Query visitReturnClause(QueryGrammarParser.ReturnClauseContext ctx) { return visitChildren(ctx); }
 
-    @Override public Query visitEqCond2(QueryGrammarParser.EqCond2Context ctx) { return visitChildren(ctx); }
+    @Override public Query visitEqCond2(QueryGrammarParser.EqCond2Context ctx) {
+        Query q1 = visit(ctx.xq(0));
+        Query q2 = visit(ctx.xq(1));
+        return new EqCond(q1, q2);
+    }
 
-    @Override public Query visitCompoundCond(QueryGrammarParser.CompoundCondContext ctx) { return visitChildren(ctx); }
+    @Override public Query visitCompoundCond(QueryGrammarParser.CompoundCondContext ctx) {
+        Query c1 = visit(ctx.cond(0));
+        Query c2 = visit(ctx.cond(1));
+        String conj = ctx.CONJ().getText();
+        return new CompoundCond(c1, c2, conj);
+    }
 
-    @Override public Query visitEqCond1(QueryGrammarParser.EqCond1Context ctx) { return visitChildren(ctx); }
+    @Override public Query visitEqCond1(QueryGrammarParser.EqCond1Context ctx) {
+        Query q1 = visit(ctx.xq(0));
+        Query q2 = visit(ctx.xq(1));
+        return new EqCond(q1, q2);
+    }
 
     @Override public Query visitSatCond(QueryGrammarParser.SatCondContext ctx) { return visitChildren(ctx); }
 
-    @Override public Query visitEmptyCond(QueryGrammarParser.EmptyCondContext ctx) { return visitChildren(ctx); }
+    @Override public Query visitEmptyCond(QueryGrammarParser.EmptyCondContext ctx) {
+        Query query = visit(ctx.xq());
+        return new EmptyCond(query);
+    }
 
-    @Override public Query visitNegCond(QueryGrammarParser.NegCondContext ctx) { return visitChildren(ctx); }
+    @Override public Query visitNegCond(QueryGrammarParser.NegCondContext ctx) {
+        return new NegCond(visit(ctx.cond()));
+    }
 
-    @Override public Query visitParaCond(QueryGrammarParser.ParaCondContext ctx) { return visitChildren(ctx); }
+    @Override public Query visitParaCond(QueryGrammarParser.ParaCondContext ctx) {
+        return visit(ctx.cond());
+    }
 
-    @Override public Query visitIsCond1(QueryGrammarParser.IsCond1Context ctx) { return visitChildren(ctx); }
+    @Override public Query visitIsCond1(QueryGrammarParser.IsCond1Context ctx) {
+        Query q1 = visit(ctx.xq(0));
+        Query q2 = visit(ctx.xq(1));
+        return new IsCond(q1, q2);
+    }
 
-    @Override public Query visitIsCond2(QueryGrammarParser.IsCond2Context ctx) { return visitChildren(ctx); }
+    @Override public Query visitIsCond2(QueryGrammarParser.IsCond2Context ctx) {
+        Query q1 = visit(ctx.xq(0));
+        Query q2 = visit(ctx.xq(1));
+        return new IsCond(q1, q2);
+    }
 
     @Override public Query visitStartTag(QueryGrammarParser.StartTagContext ctx) { return visitChildren(ctx); }
 
