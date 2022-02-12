@@ -10,8 +10,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.*;
 
 public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
@@ -22,14 +20,13 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
     private final ExpressionBuilder expBuilder;
     private final Document doc;
 
-    public QueryBuilder() throws Exception {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
+    public QueryBuilder(Document doc) throws Exception {
+        Objects.requireNonNull(doc, "Document is NULL!");
+        this.doc = doc;
         this.contextMap = new HashMap<>();  // current context
         this.contextStack = new Stack<>();  // for variable scope
         this.xpath = new Xpath();
         this.expBuilder = new ExpressionBuilder();
-        this.doc = db.newDocument();
     }
 
     @Override public Query visitRpXq(QueryGrammarParser.RpXqContext ctx) {
