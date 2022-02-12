@@ -9,19 +9,16 @@ import java.util.Objects;
 
 public class VarXq implements Query {
 
-    private final Map<String, List<Node>> contextMap;
-    private final String varName;
+    private final List<Node> res;
 
-    public VarXq(Map<String, List<Node>> map, String name) {
-        Objects.requireNonNull(map, "Context map is NULL");
-        Objects.requireNonNull(name, "Variable name is NULL!");
-        this.contextMap = map;
-        this.varName = name;
+    public VarXq(List<Node> nodeList) {
+        Objects.requireNonNull(nodeList, "Node list is NULL");
+        this.res = nodeList;
     }
 
     @Override
     public List<Node> evaluate(Document doc) throws Exception {
-        return this.contextMap.get(this.varName);
+        return this.res;
     }
 
     @Override

@@ -6,15 +6,13 @@ import edu.ucsd.cse232b.parsers.QueryGrammarParser;
 import edu.ucsd.cse232b.query.*;
 import edu.ucsd.cse232b.xpath.ExpressionBuilder;
 import edu.ucsd.cse232b.xpath.Xpath;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
 
@@ -68,12 +66,52 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
     }
 
     @Override public Query visitVarXq(QueryGrammarParser.VarXqContext ctx) {
-        return new VarXq(this.contextMap, ctx.VAR().getText());
+        return new VarXq(this.contextMap.get(ctx.VAR().getText()));
     }
 
-    @Override public Query visitLetXq(QueryGrammarParser.LetXqContext ctx) { return visitChildren(ctx); }
+    @Override public Query visitLetXq(QueryGrammarParser.LetXqContext ctx) {
+        this.constructClause(ctx.letClause().VAR(), ctx.letClause().xq());
+        Query query = visit(ctx.xq());
+        this.deconstructClause(ctx.letClause().VAR().size());
+        return query;
+    }
 
-    @Override public Query visitForXq(QueryGrammarParser.ForXqContext ctx) { return visitChildren(ctx); }
+    private void forXq(int count, List<Node> res, QueryGrammarParser.ForXqContext ctx) throws Exception {
+        int size = ctx.forClause().VAR().size();
+        if(count == size) {
+            // should execute where
+            if(null != ctx.letClause()) {
+                this.constructClause(ctx.letClause().VAR(), ctx.letClause().xq());
+            }
+            if(null != ctx.whereClause() && null != visit(ctx.whereClause().cond())) {
+                res.addAll(visit(ctx.returnClause().xq()).evaluate(this.doc));
+            }
+            if(null != ctx.letClause()) {
+                this.deconstructClause(ctx.letClause().VAR().size());
+            }
+        } else {
+            String varName = ctx.forClause().VAR(count).getText();
+            List<Node> nodeList = visit(ctx.forClause().xq(count)).evaluate(this.doc);
+            for(Node node : nodeList) {
+                Map<String, List<Node>> oldMap = new HashMap<>(this.contextMap);
+                this.contextStack.push(oldMap);
+                this.contextMap.put(varName, List.of(node));
+                this.forXq(count+1, res, ctx);
+                this.contextMap = this.contextStack.pop();
+            }
+        }
+    }
+
+    @Override public Query visitForXq(QueryGrammarParser.ForXqContext ctx) {
+        List<Node> res = new ArrayList<>();
+        try {
+            this.forXq(0, res, ctx);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // use VarXq as a simple solution
+        return new VarXq(res);
+    }
 
     @Override public Query visitTagXq(QueryGrammarParser.TagXqContext ctx) {
         String tagName = ctx.startTag().tagName().getText();
@@ -108,12 +146,16 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
         return new EqCond(q1, q2);
     }
 
-    @Override public Query visitSatCond(QueryGrammarParser.SatCondContext ctx) {
-        int count = ctx.VAR().size();
+    private void constructClause(List<TerminalNode> varList, List<QueryGrammarParser.XqContext> queryList) {
+        if(null == varList || null == queryList || varList.size() == queryList.size()) {
+            throw new IllegalArgumentException();
+        }
+
+        int count = varList.size();
         for(int i=0; i<count; i++) {
             try {
-                List<Node> valueList = visit(ctx.xq(i)).evaluate(this.doc);
-                String varName = ctx.VAR(i).getText();
+                List<Node> valueList = visit(queryList.get(i)).evaluate(this.doc);
+                String varName = varList.get(i).getText();
                 Map<String, List<Node>> oldMap = new HashMap<>(this.contextMap);
                 this.contextMap.put(varName, valueList);
                 this.contextStack.push(oldMap);
@@ -121,6 +163,19 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void deconstructClause(int count) {
+        if(count < 0 || count > this.contextStack.size()) {
+            throw new IllegalArgumentException();
+        }
+        for(int i=0; i<count; i++) {
+            this.contextMap = this.contextStack.pop();
+        }
+    }
+
+    @Override public Query visitSatCond(QueryGrammarParser.SatCondContext ctx) {
+        this.constructClause(ctx.VAR(), ctx.xq());
 
         Query finalCond = visit(ctx.cond());
         Query condQuery = null;
@@ -129,9 +184,7 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            for(int i=0; i<count; i++) {
-                this.contextMap = this.contextStack.pop();
-            }
+            this.deconstructClause(ctx.VAR().size());
         }
 
         return condQuery;
