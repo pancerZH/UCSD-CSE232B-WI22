@@ -6,8 +6,11 @@ import edu.ucsd.cse232b.parsers.QueryGrammarParser;
 import edu.ucsd.cse232b.query.*;
 import edu.ucsd.cse232b.xpath.ExpressionBuilder;
 import edu.ucsd.cse232b.xpath.Xpath;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,16 +18,20 @@ import java.util.Stack;
 
 public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
 
-    private final Map<String, List<Node>> contextMap;
+    private Map<String, List<Node>> contextMap;
     private final Stack<Map<String, List<Node>>> contextStack;
     private final Xpath xpath;
     private final ExpressionBuilder expBuilder;
+    private final Document doc;
 
     public QueryBuilder() throws Exception {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
         this.contextMap = new HashMap<>();  // current context
         this.contextStack = new Stack<>();  // for variable scope
         this.xpath = new Xpath();
         this.expBuilder = new ExpressionBuilder();
+        this.doc = db.newDocument();
     }
 
     @Override public Query visitRpXq(QueryGrammarParser.RpXqContext ctx) {
@@ -101,7 +108,34 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
         return new EqCond(q1, q2);
     }
 
-    @Override public Query visitSatCond(QueryGrammarParser.SatCondContext ctx) { return visitChildren(ctx); }
+    @Override public Query visitSatCond(QueryGrammarParser.SatCondContext ctx) {
+        int count = ctx.VAR().size();
+        for(int i=0; i<count; i++) {
+            try {
+                List<Node> valueList = visit(ctx.xq(i)).evaluate(this.doc);
+                String varName = ctx.VAR(i).getText();
+                Map<String, List<Node>> oldMap = new HashMap<>(this.contextMap);
+                this.contextMap.put(varName, valueList);
+                this.contextStack.push(oldMap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        Query finalCond = visit(ctx.cond());
+        Query condQuery = null;
+        try {
+            condQuery = new SatCond(finalCond.evaluate(this.doc));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            for(int i=0; i<count; i++) {
+                this.contextMap = this.contextStack.pop();
+            }
+        }
+
+        return condQuery;
+    }
 
     @Override public Query visitEmptyCond(QueryGrammarParser.EmptyCondContext ctx) {
         Query query = visit(ctx.xq());
