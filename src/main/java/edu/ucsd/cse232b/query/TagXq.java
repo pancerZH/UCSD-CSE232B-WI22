@@ -22,11 +22,8 @@ public class TagXq implements Query {
     @Override
     public List<Node> evaluate(Document doc) throws Exception {
         List<Node> res = this.query.evaluate(doc);
-        Element element = doc.createElement(this.tagName);
-        for(Node node : res) {
-            element.appendChild(node);
-        }
-        return List.of(element);
+        Node node = makeElement(doc, this.tagName, res);
+        return List.of(node);
     }
 
     @Override

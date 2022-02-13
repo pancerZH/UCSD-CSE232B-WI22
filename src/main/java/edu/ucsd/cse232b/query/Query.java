@@ -32,7 +32,7 @@ public interface Query {
         Node node = doc.createElement(tagName);
         for(Node n : list) {
             if(!Objects.isNull(n)) {
-                node.appendChild(n.cloneNode(true));
+                node.appendChild(doc.importNode(n, true));
             }
         }
         return node;

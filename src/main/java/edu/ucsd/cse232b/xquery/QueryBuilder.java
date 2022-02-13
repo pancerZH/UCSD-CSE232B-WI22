@@ -31,7 +31,7 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
 
     @Override public Query visitRpXq(QueryGrammarParser.RpXqContext ctx) {
         Query query = visit(ctx.xq());
-        Expression exp = this.expBuilder.visit(ctx.rp());
+        Expression exp = this.expBuilder.visit(xpath.parse(ctx.rp().getText()).rp());
         Query.PathOp op = Query.opFromString(ctx.pathOp().getText());
         return new RpXq(query, op, exp);
     }
@@ -80,7 +80,7 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
             if(null != ctx.letClause()) {
                 this.constructClause(ctx.letClause().VAR(), ctx.letClause().xq());
             }
-            if(null != ctx.whereClause() && null != visit(ctx.whereClause().cond())) {
+            if(null == ctx.whereClause() || (null != ctx.whereClause() && null != visit(ctx.whereClause().cond()).evaluate(this.doc))) {
                 res.addAll(visit(ctx.returnClause().xq()).evaluate(this.doc));
             }
             if(null != ctx.letClause()) {

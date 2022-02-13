@@ -6,9 +6,6 @@ import java.util.List;
 
 public class Milestone2SolvedTest {
     public static void main(String[] args) throws Exception {
-//        1. 不用传 document node?
-//        2. let, where clause optional
-//        3. 不用 mapStack?
         String query;
         Xquery xq = new Xquery();
         List<Node> result = List.of();

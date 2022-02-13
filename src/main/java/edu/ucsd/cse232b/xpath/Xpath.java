@@ -35,11 +35,14 @@ public class Xpath {
         this.documentBuilder.setEntityResolver(new MyResolver());
     }
 
-    public List<Node> evaluate(String path) throws Exception {
+    public ExpressionGrammarParser parse(String path)  {
         final ExpressionGrammarLexer lexer = new ExpressionGrammarLexer(CharStreams.fromString(path));
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
-        final ExpressionGrammarParser parser = new ExpressionGrammarParser(tokens);
-        final ParserRuleContext tree = parser.ap();
+        return new ExpressionGrammarParser(tokens);
+    }
+
+    public List<Node> evaluate(String path) throws Exception {
+        final ParserRuleContext tree = this.parse(path).ap();
         final ExpressionBuilder expBuild = new ExpressionBuilder();
         final Expression rootExp = expBuild.visit(tree);
 
