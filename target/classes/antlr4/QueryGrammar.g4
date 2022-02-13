@@ -3,7 +3,7 @@ import ExpressionGrammar;
 
 
 /*Rules*/
-xq: VAR #VarXq | STRING #StringXq | ap #ApXq
+    xq: VAR #VarXq | STRING #StringXq | ap #ApXq
     | LPR xq RPR #ParaXq | xq COMMA xq #BinaryXq | xq pathOp rp #RpXq
     | startTag LBB xq RBB endTag #TagXq
     | forClause letClause whereClause returnClause #ForXq
@@ -19,7 +19,7 @@ cond: xq EQ xq #EqCond1 | xq EQS xq #EqCond2
     | EMPTY LPR xq RPR #EmptyCond
     | SOME VAR IN xq (COMMA VAR IN xq)* SATISF cond #SatCond
     | LPR cond RPR #ParaCond
-    | cond CONJ cond # CompoundCond
+    | cond CONJ cond #CompoundCond
     | NEG cond #NegCond;
 
 startTag: LAB tagName RAB;
