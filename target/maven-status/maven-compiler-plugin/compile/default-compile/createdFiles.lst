@@ -25,6 +25,7 @@ edu\ucsd\cse232b\expression\FilterRp.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$UnaryRp5Context.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$CompoundFtContext.class
 edu\ucsd\cse232b\xpath\MyResolver.class
+edu\ucsd\cse232b\xquery\Milestone2ExtraTest.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$UnaryRp6Context.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$AttNameContext.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$BinaryRp2Context.class
@@ -39,6 +40,7 @@ edu\ucsd\cse232b\expression\NegFt.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$EndTagContext.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$DocNameContext.class
 edu\ucsd\cse232b\expression\Expression.class
+edu\ucsd\cse232b\xquery\Milestone2SolvedTest.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$ApContext.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$DocNameContext.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$ParaCondContext.class

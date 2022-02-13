@@ -6,11 +6,11 @@ import ExpressionGrammar;
     xq: VAR #VarXq | STRING #StringXq | ap #ApXq
     | LPR xq RPR #ParaXq | xq COMMA xq #BinaryXq | xq pathOp rp #RpXq
     | startTag LBB xq RBB endTag #TagXq
-    | forClause letClause whereClause returnClause #ForXq
+    | forClause (letClause)? (whereClause)? returnClause #ForXq
     | letClause xq #LetXq;
 
 forClause: FOR VAR IN xq (COMMA VAR IN xq)* ;  // could have multiple (at least 1) sub expressions
-letClause: LET VAR ASSIGN xq (COMMA VAR ASSIGN xq)* ;  // could have multiple (at least 1) sub expressions
+letClause: LET VAR ASSIGN xq (COMMA VAR ASSIGN xq)*;
 whereClause: WHERE cond;
 returnClause: RETURN xq;
 

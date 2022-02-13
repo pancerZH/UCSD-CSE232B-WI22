@@ -31,6 +31,7 @@ D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\uc
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\xpath\ExpressionBuilder.java
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\expression\AbsolutePath.java
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\xpath\Milestone1Playground.java
+D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\xquery\Milestone2SolvedTest.java
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\expression\BinaryFt.java
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\query\ParaXq.java
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\parsers\QueryGrammarLexer.java
@@ -44,6 +45,7 @@ D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\uc
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\expression\UnaryFt.java
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\query\EmptyCond.java
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\expression\UnaryRp.java
+D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\xquery\Milestone2ExtraTest.java
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\parsers\ExpressionGrammarLexer.java
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\query\StringXq.java
 D:\files\ucsd\course\win22\cse232\project\UCSD-CSE232B-WI22\src\main\java\edu\ucsd\cse232b\query\SatCond.java
