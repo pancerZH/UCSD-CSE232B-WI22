@@ -3,6 +3,8 @@ package edu.ucsd.cse232b.query;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +19,7 @@ public class StringXq implements Query {
 
     @Override
     public List<Node> evaluate(Document doc) throws Exception {
-        return List.of(makeText(doc, this.str));
+        return new ArrayList<>(Arrays.asList(makeText(doc, this.str)));
     }
 
     @Override
