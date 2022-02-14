@@ -17,11 +17,11 @@ returnClause: RETURN xq;
 cond: xq EQ xq #EqCond1 | xq EQS xq #EqCond2
     | xq IS xq #IsCond1 | xq ISS xq #IsCond2
     | EMPTY LPR xq RPR #EmptyCond
-    | SOME VAR IN xq (COMMA VAR IN xq)* SATISF cond #SatCond
+    | satisfy cond #SatCond
     | LPR cond RPR #ParaCond
     | cond CONJ cond #CompoundCond
     | NEG cond #NegCond;
-
+satisfy: SOME VAR IN xq (COMMA VAR IN xq)* SATISF;
 startTag: LAB tagName RAB;
 endTag: LAB SL tagName RAB;
 

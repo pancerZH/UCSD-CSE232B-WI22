@@ -103,6 +103,7 @@ edu\ucsd\cse232b\parsers\QueryGrammarParser$ParaXqContext.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$RpContext.class
 edu\ucsd\cse232b\parsers\QueryGrammarListener.class
 edu\ucsd\cse232b\parsers\QueryGrammarBaseListener.class
+edu\ucsd\cse232b\parsers\QueryGrammarParser$SatisfyContext.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$UnaryRp4Context.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$CompOpContext.class
 edu\ucsd\cse232b\query\ParaXq.class

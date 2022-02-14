@@ -282,6 +282,18 @@ public class QueryGrammarBaseListener implements QueryGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSatisfy(QueryGrammarParser.SatisfyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSatisfy(QueryGrammarParser.SatisfyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStartTag(QueryGrammarParser.StartTagContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -163,6 +163,12 @@ public interface QueryGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIsCond2(QueryGrammarParser.IsCond2Context ctx);
 	/**
+	 * Visit a parse tree produced by {@link QueryGrammarParser#satisfy}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSatisfy(QueryGrammarParser.SatisfyContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link QueryGrammarParser#startTag}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

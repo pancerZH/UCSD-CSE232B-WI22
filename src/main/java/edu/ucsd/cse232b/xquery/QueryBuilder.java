@@ -144,7 +144,7 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
     }
 
     private void constructClause(List<TerminalNode> varList, List<QueryGrammarParser.XqContext> queryList) {
-        if(null == varList || null == queryList || varList.size() == queryList.size()) {
+        if(null == varList || null == queryList || varList.size() != queryList.size()) {
             throw new IllegalArgumentException();
         }
 
@@ -172,7 +172,7 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
     }
 
     @Override public Query visitSatCond(QueryGrammarParser.SatCondContext ctx) {
-        this.constructClause(ctx.VAR(), ctx.xq());
+        this.constructClause(ctx.satisfy().VAR(), ctx.satisfy().xq());
 
         Query finalCond = visit(ctx.cond());
         Query condQuery = null;
@@ -181,7 +181,7 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            this.deconstructClause(ctx.VAR().size());
+            this.deconstructClause(ctx.satisfy().VAR().size());
         }
 
         return condQuery;

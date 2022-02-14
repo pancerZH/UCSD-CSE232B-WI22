@@ -266,6 +266,16 @@ public interface QueryGrammarListener extends ParseTreeListener {
 	 */
 	void exitIsCond2(QueryGrammarParser.IsCond2Context ctx);
 	/**
+	 * Enter a parse tree produced by {@link QueryGrammarParser#satisfy}.
+	 * @param ctx the parse tree
+	 */
+	void enterSatisfy(QueryGrammarParser.SatisfyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link QueryGrammarParser#satisfy}.
+	 * @param ctx the parse tree
+	 */
+	void exitSatisfy(QueryGrammarParser.SatisfyContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link QueryGrammarParser#startTag}.
 	 * @param ctx the parse tree
 	 */

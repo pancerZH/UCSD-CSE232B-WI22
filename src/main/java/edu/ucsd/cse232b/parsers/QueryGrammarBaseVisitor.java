@@ -173,6 +173,13 @@ public class QueryGrammarBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitSatisfy(QueryGrammarParser.SatisfyContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitStartTag(QueryGrammarParser.StartTagContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
