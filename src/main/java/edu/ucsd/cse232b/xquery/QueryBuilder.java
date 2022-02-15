@@ -37,7 +37,8 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
     }
     
     @Override public Query visitStringXq(QueryGrammarParser.StringXqContext ctx) {
-        return new StringXq(ctx.STRING().getText());
+        String stringConst = ctx.STRING().getText();
+        return new StringXq(stringConst.substring(1, stringConst.length()-1));
     }
 
     @Override public Query visitParaXq(QueryGrammarParser.ParaXqContext ctx) {
