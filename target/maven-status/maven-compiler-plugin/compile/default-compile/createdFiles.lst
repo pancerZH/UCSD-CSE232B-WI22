@@ -130,6 +130,7 @@ edu\ucsd\cse232b\query\TagXq.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$UnaryRp4Context.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$TagXqContext.class
+edu\ucsd\cse232b\xquery\Main.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$FilterRpContext.class
 edu\ucsd\cse232b\expression\UnaryFt.class
 edu\ucsd\cse232b\parsers\QueryGrammarVisitor.class

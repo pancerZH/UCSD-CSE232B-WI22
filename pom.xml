@@ -55,7 +55,7 @@
                             </artifactSet>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>edu.ucsd.cse232b.xpath.Main</mainClass>
+                                    <mainClass>edu.ucsd.cse232b.xquery.Main</mainClass>
                                 </transformer>
                             </transformers>
                             <filters>

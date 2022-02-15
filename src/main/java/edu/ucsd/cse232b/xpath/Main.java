@@ -21,7 +21,8 @@ public class Main {
             StringBuilder query = new StringBuilder();
             String str;
             while ((str = in.readLine()) != null) {
-                query.append(str.replaceAll("\r\n|\r|\n", ""));
+                query.append(str.replaceAll("\r\n|\r|\n", " "));
+                query.append(" ");
             }
             Xpath xpath = new Xpath();
             List<Node> result = xpath.evaluate(query.toString());

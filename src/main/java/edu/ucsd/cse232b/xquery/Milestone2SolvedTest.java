@@ -20,9 +20,9 @@ public class Milestone2SolvedTest {
         </acts>
         */
         System.out.println("Test testcase1:");
-        query = "<acts> { for $a in doc(\"j_caesar.xml\")//ACT\n where not empty ( for $sp in $a/SCENE/SPEECH\n where " +
-                "($sp/SPEAKER/text() = \"FLAVIUS\" and $sp/../TITLE/text()=\"SCENE I. Rome. A street.\") return " +
-                "<speaker> {\n $sp/text() }\n</speaker> ) return <act>{$a/TITLE/text()}</act> }</acts>";
+        query = "<acts> { for $a in doc(\"j_caesar.xml\")//ACT\n where not empty ( for $sp in $a/SCENE/SPEECH\n where \n" +
+                "($sp/SPEAKER/text() = \"FLAVIUS\" and $sp/../TITLE/text()=\"SCENE I.  Rome. A street.\") return \n" +
+                "<speaker> {\n $sp/text() }\n</speaker> ) return <act>{$a/TITLE/text()}</act> }</acts>\n";
         result = xq.evaluate(query);
         System.out.printf("returned results: %d\n", result.size());
         xq.transform(result);
@@ -65,7 +65,7 @@ public class Milestone2SolvedTest {
         */
         System.out.println("Test testcase3:");
         query = "<result>{ for $a in (for $s in doc(\"j_caesar.xml\")//ACT where $s/TITLE/text()=\"ACT I\" return $s), $sc in " +
-                "(for $t in $a/SCENE where $t/TITLE/text()=\"SCENE I. Rome. A street.\" return $t),$sp in (for $d in " +
+                "(for $t in $a/SCENE where $t/TITLE/text()=\"SCENE I.  Rome. A street.\" return $t),$sp in (for $d in " +
                 "$sc/SPEECH where $d/LINE/text()=\"Upon a labouring day without the sign\" return $d) where " +
                 "$sp/SPEAKER/text() = \"FLAVIUS\" return " +
                 "<who>{$sp/SPEAKER/text()}</who>,<when>{ <act>{$a/TITLE/text()}</act>, " +
