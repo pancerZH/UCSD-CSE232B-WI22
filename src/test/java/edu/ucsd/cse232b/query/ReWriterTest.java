@@ -67,7 +67,7 @@ class ReWriterTest {
             when(ctxMocked.forClause().xq(i).getText()).thenReturn(forClauseGroup[i]);
         }
 
-        when(ctxMocked.whereClause().cond().getText()).thenReturn("where $tb eq $ta\n");
+        when(ctxMocked.whereClause().cond().getText()).thenReturn("$tb eq $ta\n");
         when(ctxMocked.returnClause().xq().getText()).thenReturn("""
                 <book-with-prices>
                 { $tb,
@@ -97,6 +97,90 @@ class ReWriterTest {
                 <price>{ $tuple/b/*/price }</price> }
                 </book-with-prices>""";
 
+        assertEquals(expectedRes, ReWriter.convert(ctxMocked));
+    }
+
+    @Test
+    void convert2() {
+        QueryGrammarParser.ForXqContext ctxMocked = mock(QueryGrammarParser.ForXqContext.class, RETURNS_DEEP_STUBS);
+        String[] varGroup = {"$b1", "$aj", "$a1", "$af1", "$al1",
+                            "$b2", "$a21", "$af21", "$al21", "$a22", "$af22", "$al22",
+                            "$b3", "$a3", "$af3", "$al3"};
+        String[] forClauseGroup = {"doc(\"input\")/book",
+                                "$b1/author/first/text()",
+                                "$b1/author",
+                                "$a1/first",
+                                "$a1/last",
+                                "doc(\"input\")/book",
+                                "$b2/author",
+                                "$a21/first",
+                                "$a21/last",
+                                "$b2/author",
+                                "$a22/first",
+                                "$a22/last",
+                                "doc(\"input\")/book",
+                                "$b3/author",
+                                "$a3/first",
+                                "$a3/last"};
+        for(int i=0; i<varGroup.length; i++) {
+            when(ctxMocked.forClause().VAR().size()).thenReturn(varGroup.length);
+            when(ctxMocked.forClause().VAR(i).getText()).thenReturn(varGroup[i]);
+            when(ctxMocked.forClause().xq(i).getText()).thenReturn(forClauseGroup[i]);
+        }
+
+        when(ctxMocked.whereClause().cond().getText()).thenReturn("""
+                $aj eq "John" and
+                $af1 eq $af21 and $al1 eq $al21 and
+                $af22 eq $af3 and $al22 eq $al3
+                """);
+        when(ctxMocked.returnClause().xq().getText()).thenReturn("<triplet> {$b1, $b2, $b3} </triplet>");
+
+        String expectedRes = """
+                for $tuple in join (join (for $b1 in doc("input")/book,
+                $aj in $b1/author/first/text(),
+                $a1 in $b1/author,
+                $af1 in $a1/first,
+                $al1 in $a1/last
+                where $aj eq "John"
+                return <tuple>{
+                <b1>{$b1}<\\b1>,
+                <aj>{$aj}<\\aj>,
+                <a1>{$a1}<\\a1>,
+                <af1>{$af1}<\\af1>,
+                <al1>{$al1}<\\al1>
+                }<\\tuple>,
+                for $b2 in doc("input")/book,
+                $a21 in $b2/author,
+                $af21 in $a21/first,
+                $al21 in $a21/last,
+                $a22 in $b2/author,
+                $af22 in $a22/first,
+                $al22 in $a22/last
+                return <tuple>{
+                <b2>{$b2}<\\b2>,
+                <a21>{$a21}<\\a21>,
+                <af21>{$af21}<\\af21>,
+                <al21>{$al21}<\\al21>,
+                <a22>{$a22}<\\a22>,
+                <af22>{$af22}<\\af22>,
+                <al22>{$al22}<\\al22>
+                }<\\tuple>,
+                [al1,af1], [al21,af21]
+                ),
+                for $b3 in doc("input")/book,
+                $a3 in $b3/author,
+                $af3 in $a3/first,
+                $al3 in $a3/last
+                return <tuple>{
+                <b3>{$b3}<\\b3>,
+                <a3>{$a3}<\\a3>,
+                <af3>{$af3}<\\af3>,
+                <al3>{$al3}<\\al3>
+                }<\\tuple>,
+                [af22,al22], [af3,al3]
+                )
+                return
+                <triplet> {$tuple/b1/*, $tuple/b2/*, $tuple/b3/*} </triplet>""";
         assertEquals(expectedRes, ReWriter.convert(ctxMocked));
     }
 }

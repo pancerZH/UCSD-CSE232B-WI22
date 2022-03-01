@@ -52,7 +52,7 @@ public class ReWriter {
         for (String where : wheres) {
             // $a = $b -> left=$a, right=$b, no leading or trailing spaces
             String[] xqs = where.split("eq|=");
-            String left = xqs[0].replaceAll("where ", "").strip();
+            String left = xqs[0].strip();
             String right = xqs[1].strip();
             for (int i = 0; i < forList.size(); i++) {
                 if (forList.get(i).containsKey(left) || forList.get(i).containsKey(right)) {
