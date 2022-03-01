@@ -11,7 +11,7 @@ class ReWriterTest {
 
     @org.junit.jupiter.api.Test
     void convertToString() {
-        ReWriter reWriter = new ReWriter();
+        ReWriter reWriter = ReWriter.generateReWriter();
         Map<String, String> forMap = new HashMap<>();
         forMap.put("$b1", "doc(\"input\")/book");
         forMap.put("$aj", "$b1/author/first/text()");
