@@ -29,10 +29,10 @@ class ReWriterTest {
         orderMap.put(3, "$af1");
         orderMap.put(4, "$al1");
 
-        Map<Pair<String, String>, String> condMap = new HashMap<>();
-        condMap.put(new Pair<>("$aj", "John"), "eq");
-        condMap.put(new Pair<>("$af1", "$af21"), "eq");
-        condMap.put(new Pair<>("$al1", "$al21"), "eq");
+        Map<String, String> condMap = new HashMap<>();
+        condMap.put("$aj", "John");
+        condMap.put("$af1", "$af21");
+        condMap.put("$al1", "$al21");
 
         reWriter.setForMap(forMap, orderMap);
         reWriter.setCondMap(condMap);

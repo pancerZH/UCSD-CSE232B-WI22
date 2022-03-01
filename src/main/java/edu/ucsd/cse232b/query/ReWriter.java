@@ -1,7 +1,6 @@
 package edu.ucsd.cse232b.query;
 
 import edu.ucsd.cse232b.parsers.QueryGrammarParser;
-import org.antlr.v4.runtime.misc.Pair;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -45,8 +44,8 @@ public class ReWriter {
 
         // now we have a list of for clauses
         // then build condition map from it
-        List<Map<Pair<String, String>, String>> whereList = new ArrayList<>();
-        for(Map<String, String> map : forList) {
+        List<Map<String, String>> whereList = new ArrayList<>();
+        for(Map<String, String> ignored : forList) {
             whereList.add(new HashMap<>());
         }
         String[] wheres = ctx.whereClause().cond().getText().split("and");
@@ -58,7 +57,7 @@ public class ReWriter {
             for (int i = 0; i < forList.size(); i++) {
                 if (forList.get(i).containsKey(left) || forList.get(i).containsKey(right)) {
                     // a join condition must involve two sub for clause
-                    whereList.get(i).put(new Pair<>(left, right), "=");
+                    whereList.get(i).put(left, right);
                 }
             }
 
@@ -92,9 +91,8 @@ public class ReWriter {
             }
             List<String> condLeft = new ArrayList<>();
             List<String> condRight = new ArrayList<>();
-            var c = whereList.get(i);
-            for(Pair<String, String> condPair : whereList.get(i).keySet()) {
-                String left = condPair.a, right = condPair.b;
+            for(Map.Entry<String, String> entry : whereList.get(i).entrySet()) {
+                String left = entry.getKey(), right = entry.getValue();
                 if((varSet.contains(left) && forList.get(i).containsKey(right)) ||
                         (varSet.contains(right) && forList.get(i).containsKey(left))) {
                     // this is a match
@@ -162,7 +160,7 @@ public class ReWriter {
     private final Map<Integer, String> forOrderMap;
     // where [xq1] [cond] [xq2]
     // map: <xq1, xq2> -> cond
-    private final Map<Pair<String, String>, String> condMap;
+    private final Map<String, String> condMap;
 
     public static ReWriter generateReWriter() {
         return new ReWriter();
@@ -180,7 +178,7 @@ public class ReWriter {
         this.forOrderMap.putAll(order);
     }
 
-    public void setCondMap(Map<Pair<String, String>, String> map) {
+    public void setCondMap(Map<String, String> map) {
         this.condMap.clear();
         this.condMap.putAll(map);
     }
@@ -205,20 +203,18 @@ public class ReWriter {
         // to see whether we can push down any selection
         StringBuilder sb = new StringBuilder("where ");
         boolean pushDown = false;
-        for(Map.Entry<Pair<String, String>, String> entry : this.condMap.entrySet()) {
-            String condRoot1 = entry.getKey().a.split("/")[0];
-            String condRoot2 = entry.getKey().b.split("/")[0];
+        for(Map.Entry<String, String> entry : this.condMap.entrySet()) {
+            String condRoot1 = entry.getKey().split("/")[0];
+            String condRoot2 = entry.getValue().split("/")[0];
             if((this.forMap.containsKey(condRoot1) && this.forMap.containsKey(condRoot2)) ||
                     (this.forMap.containsKey(condRoot1) && !condRoot2.startsWith("$")) ||
                     (this.forMap.containsKey(condRoot2) && !condRoot1.startsWith("$"))) {
                 if(!pushDown) {
                     pushDown = true;
                 }
-                sb.append(entry.getKey().a);
-                sb.append(" ");
+                sb.append(entry.getKey());
+                sb.append(" eq ");
                 sb.append(entry.getValue());
-                sb.append(" ");
-                sb.append(entry.getKey().b);
                 sb.append(",\n");
             }
         }
