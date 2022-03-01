@@ -4,12 +4,15 @@ import edu.ucsd.cse232b.parsers.QueryGrammarParser;
 import org.antlr.v4.runtime.misc.Pair;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ReWriter {
 
     public static String convert(QueryGrammarParser.ForXqContext ctx) {
         StringBuilder sb = new StringBuilder();
         List<Map<String, String>> forList = new ArrayList<>();
+        List<Map<Integer, String>> forOrderList = new ArrayList<>();
         for(int i=0; i<ctx.forClause().VAR().size(); i++) {
             // var: $b
             String var = ctx.forClause().VAR(i).getText();
@@ -18,10 +21,13 @@ public class ReWriter {
             // root: $a
             String root = xq.split("/")[0];
             boolean find = false;
-            for(Map<String, String> map : forList) {
+            for(int j=0; j<forList.size(); j++) {
+                Map<String, String> map  =forList.get(j);
+                Map<Integer, String> orderMap = forOrderList.get(j);
                 if(map.containsKey(root)) {
                     find = true;
                     map.put(var, xq);
+                    orderMap.put(orderMap.size(), var);
                     break;
                 }
             }
@@ -31,6 +37,9 @@ public class ReWriter {
                 Map<String, String> forMap = new HashMap<>();
                 forMap.put(var, xq);
                 forList.add(forMap);
+                Map<Integer, String> orderMap = new HashMap<>();
+                orderMap.put(0, var);
+                forOrderList.add(orderMap);
             }
         }
 
@@ -44,7 +53,7 @@ public class ReWriter {
         for (String where : wheres) {
             // $a = $b -> left=$a, right=$b, no leading or trailing spaces
             String[] xqs = where.split("eq|=");
-            String left = xqs[0].strip();
+            String left = xqs[0].replaceAll("where ", "").strip();
             String right = xqs[1].strip();
             for (int i = 0; i < forList.size(); i++) {
                 if (forList.get(i).containsKey(left) || forList.get(i).containsKey(right)) {
@@ -59,7 +68,7 @@ public class ReWriter {
         List<ReWriter> reWriterList = new ArrayList<>();
         for(int i=0; i<forList.size(); i++) {
             ReWriter reWriter = ReWriter.generateReWriter();
-            reWriter.setForMap(forList.get(i));
+            reWriter.setForMap(forList.get(i), forOrderList.get(i));
             reWriter.setCondMap(whereList.get(i));
             reWriterList.add(reWriter);
         }
@@ -83,6 +92,7 @@ public class ReWriter {
             }
             List<String> condLeft = new ArrayList<>();
             List<String> condRight = new ArrayList<>();
+            var c = whereList.get(i);
             for(Pair<String, String> condPair : whereList.get(i).keySet()) {
                 String left = condPair.a, right = condPair.b;
                 if((varSet.contains(left) && forList.get(i).containsKey(right)) ||
@@ -97,7 +107,6 @@ public class ReWriter {
                 picked.add(i);
                 varSet.addAll(forList.get(i).keySet());
                 sb.insert(0, "join (");
-                sb.append("\n");
                 sb.append(reWriterList.get(i).convertToString());
                 sb.append("[");
                 for(String left : condLeft) {
@@ -139,8 +148,10 @@ public class ReWriter {
         }
         for(String var : returnedVars) {
             String newVar = "$tuple/" + var.substring(1) + "/" + "*";
-            returnText = returnText.replaceAll(var, newVar);
+            var = Pattern.quote("$") + var.substring(1);
+            returnText = returnText.replaceAll(var, Matcher.quoteReplacement(newVar));
         }
+        sb.append("return\n");
         sb.append(returnText);
         return sb.toString();
     }
@@ -148,6 +159,7 @@ public class ReWriter {
     // for [var] in [xq]
     // map: var -> xq
     private final Map<String, String> forMap;
+    private final Map<Integer, String> forOrderMap;
     // where [xq1] [cond] [xq2]
     // map: <xq1, xq2> -> cond
     private final Map<Pair<String, String>, String> condMap;
@@ -158,12 +170,14 @@ public class ReWriter {
 
     private ReWriter() {
         this.forMap = new HashMap<>();
+        this.forOrderMap = new HashMap<>();
         this.condMap = new HashMap<>();
     }
 
-    public void setForMap(Map<String, String> map) {
+    public void setForMap(Map<String, String> map, Map<Integer, String> order) {
         this.forMap.clear();
         this.forMap.putAll(map);
+        this.forOrderMap.putAll(order);
     }
 
     public void setCondMap(Map<Pair<String, String>, String> map) {
@@ -173,12 +187,14 @@ public class ReWriter {
 
     private String convertForClause() {
         StringBuilder sb = new StringBuilder("for ");
-        for(Map.Entry<String, String> entry : this.forMap.entrySet()) {
-            sb.append(entry.getKey());
+        for(int i=0; i<this.forOrderMap.size(); i++) {
+            String var = this.forOrderMap.get(i);
+            String xq = this.forMap.get(var);
+            sb.append(var);
             sb.append(" ");
             sb.append("in");
             sb.append(" ");
-            sb.append(entry.getValue());
+            sb.append(xq);
             sb.append(",\n");
         }
         sb.deleteCharAt(sb.length()-2);  // remove last comma
@@ -217,7 +233,8 @@ public class ReWriter {
     private String convertReturnClause() {
         StringBuilder sb = new StringBuilder("return ");
         sb.append("<tuple>{\n");
-        for(String var : this.forMap.keySet()) {
+        for(int i=0; i<this.forOrderMap.size(); i++) {
+            String var = this.forOrderMap.get(i);
             String rawName = var.substring(1);
             sb.append("<").append(rawName).append(">{");
             sb.append(var);
