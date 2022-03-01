@@ -34,13 +34,13 @@ class ReWriterTest {
                 $a1 in $b1/author,
                 $aj in $b1/author/first/text()
                 where $aj eq John
-                return <tuple>
-                <af1>$af1<\\af1>,
-                <b1>$b1<\\b1>,
-                <al1>$al1<\\al1>,
-                <a1>$a1<\\a1>,
-                <aj>$aj<\\aj>
-                <\\tuple>,
+                return <tuple>{
+                <af1>{$af1}<\\af1>,
+                <b1>{$b1}<\\b1>,
+                <al1>{$al1}<\\al1>,
+                <a1>{$a1}<\\a1>,
+                <aj>{$aj}<\\aj>
+                }<\\tuple>,
                 """;
 
         assertEquals(expectedRes, reWriter.convertToString());
