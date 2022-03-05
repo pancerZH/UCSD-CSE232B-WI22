@@ -9,7 +9,13 @@ import ExpressionGrammar;
     | forClause (letClause)? (whereClause)? returnClause #ForXq
     | letClause xq #LetXq;
 
-forClause: FOR VAR IN xq (COMMA VAR IN xq)* ;  // could have multiple (at least 1) sub expressions
+constanList: LSB ID (COMMA ID)* RSB;
+joinClause: JOIN LPR xq COMMA xq COMMA constanList COMMA constanList RPR
+    | JOIN LPR joinClause COMMA xq COMMA constanList COMMA constanList RPR
+    | JOIN LPR xq COMMA joinClause COMMA constanList COMMA constanList RPR;
+
+forClause: FOR VAR IN xq (COMMA VAR IN xq)*
+    | FOR VAR IN joinClause ;  // could have multiple (at least 1) sub expressions
 letClause: LET VAR ASSIGN xq (COMMA VAR ASSIGN xq)*;
 whereClause: WHERE cond;
 returnClause: RETURN xq;
@@ -26,6 +32,7 @@ startTag: LAB tagName RAB;
 endTag: LAB SL tagName RAB;
 
 /*Token*/
+JOIN: [jJ][oO][iI][nN];
 VAR: '$' ID;
 LAB: '<';
 RAB: '>';

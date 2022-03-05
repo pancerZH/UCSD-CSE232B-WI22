@@ -76,6 +76,18 @@ public interface QueryGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTagXq(QueryGrammarParser.TagXqContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link QueryGrammarParser#constanList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstanList(QueryGrammarParser.ConstanListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link QueryGrammarParser#joinClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitJoinClause(QueryGrammarParser.JoinClauseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link QueryGrammarParser#forClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

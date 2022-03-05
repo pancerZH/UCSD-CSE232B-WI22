@@ -45,12 +45,12 @@ class ReWriterTest {
                 $al1 in $a1/last
                 where $aj eq John
                 return <tuple>{
-                <b1>{$b1}<\\b1>,
-                <aj>{$aj}<\\aj>,
-                <a1>{$a1}<\\a1>,
-                <af1>{$af1}<\\af1>,
-                <al1>{$al1}<\\al1>
-                }<\\tuple>,
+                <b1>{$b1}</b1>,
+                <aj>{$aj}</aj>,
+                <a1>{$a1}</a1>,
+                <af1>{$af1}</af1>,
+                <al1>{$al1}</al1>
+                }</tuple>,
                 """;
 
         assertEquals(expectedRes, reWriter.convertToString());
@@ -79,15 +79,15 @@ class ReWriterTest {
                 for $tuple in join (for $b in doc("input")/book,
                 $tb in $b/title
                 return <tuple>{
-                <b>{$b}<\\b>,
-                <tb>{$tb}<\\tb>
-                }<\\tuple>,
+                <b>{$b}</b>,
+                <tb>{$tb}</tb>
+                }</tuple>,
                 for $a in doc("input")/entry,
                 $ta in $a/title
                 return <tuple>{
-                <a>{$a}<\\a>,
-                <ta>{$ta}<\\ta>
-                }<\\tuple>,
+                <a>{$a}</a>,
+                <ta>{$ta}</ta>
+                }</tuple>,
                 [tb], [ta]
                 )
                 return
@@ -143,12 +143,12 @@ class ReWriterTest {
                 $al1 in $a1/last
                 where $aj eq "John"
                 return <tuple>{
-                <b1>{$b1}<\\b1>,
-                <aj>{$aj}<\\aj>,
-                <a1>{$a1}<\\a1>,
-                <af1>{$af1}<\\af1>,
-                <al1>{$al1}<\\al1>
-                }<\\tuple>,
+                <b1>{$b1}</b1>,
+                <aj>{$aj}</aj>,
+                <a1>{$a1}</a1>,
+                <af1>{$af1}</af1>,
+                <al1>{$al1}</al1>
+                }</tuple>,
                 for $b2 in doc("input")/book,
                 $a21 in $b2/author,
                 $af21 in $a21/first,
@@ -157,14 +157,14 @@ class ReWriterTest {
                 $af22 in $a22/first,
                 $al22 in $a22/last
                 return <tuple>{
-                <b2>{$b2}<\\b2>,
-                <a21>{$a21}<\\a21>,
-                <af21>{$af21}<\\af21>,
-                <al21>{$al21}<\\al21>,
-                <a22>{$a22}<\\a22>,
-                <af22>{$af22}<\\af22>,
-                <al22>{$al22}<\\al22>
-                }<\\tuple>,
+                <b2>{$b2}</b2>,
+                <a21>{$a21}</a21>,
+                <af21>{$af21}</af21>,
+                <al21>{$al21}</al21>,
+                <a22>{$a22}</a22>,
+                <af22>{$af22}</af22>,
+                <al22>{$al22}</al22>
+                }</tuple>,
                 [al1,af1], [al21,af21]
                 ),
                 for $b3 in doc("input")/book,
@@ -172,11 +172,11 @@ class ReWriterTest {
                 $af3 in $a3/first,
                 $al3 in $a3/last
                 return <tuple>{
-                <b3>{$b3}<\\b3>,
-                <a3>{$a3}<\\a3>,
-                <af3>{$af3}<\\af3>,
-                <al3>{$al3}<\\al3>
-                }<\\tuple>,
+                <b3>{$b3}</b3>,
+                <a3>{$a3}</a3>,
+                <af3>{$af3}</af3>,
+                <al3>{$al3}</al3>
+                }</tuple>,
                 [af22,al22], [af3,al3]
                 )
                 return

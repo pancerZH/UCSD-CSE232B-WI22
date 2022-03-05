@@ -118,6 +118,26 @@ public interface QueryGrammarListener extends ParseTreeListener {
 	 */
 	void exitTagXq(QueryGrammarParser.TagXqContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link QueryGrammarParser#constanList}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstanList(QueryGrammarParser.ConstanListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link QueryGrammarParser#constanList}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstanList(QueryGrammarParser.ConstanListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link QueryGrammarParser#joinClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterJoinClause(QueryGrammarParser.JoinClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link QueryGrammarParser#joinClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitJoinClause(QueryGrammarParser.JoinClauseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link QueryGrammarParser#forClause}.
 	 * @param ctx the parse tree
 	 */

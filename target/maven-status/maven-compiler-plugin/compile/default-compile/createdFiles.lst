@@ -91,6 +91,7 @@ edu\ucsd\cse232b\parsers\QueryGrammarParser$WhereClauseContext.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$UnaryRp3Context.class
 edu\ucsd\cse232b\expression\BinaryConstantFt.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$ParaRpContext.class
+edu\ucsd\cse232b\parsers\QueryGrammarParser$JoinClauseContext.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$CompoundFtContext.class
 edu\ucsd\cse232b\query\IsCond.class
 edu\ucsd\cse232b\query\Query$QueryKind.class
@@ -114,6 +115,7 @@ edu\ucsd\cse232b\expression\Expression$ExpressionKind.class
 edu\ucsd\cse232b\expression\ParaFt.class
 edu\ucsd\cse232b\xpath\Main.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$LetXqContext.class
+edu\ucsd\cse232b\parsers\QueryGrammarParser$ConstanListContext.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$NegFtContext.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$AttNameContext.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$ApXqContext.class

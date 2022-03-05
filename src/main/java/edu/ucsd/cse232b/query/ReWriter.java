@@ -239,11 +239,11 @@ public class ReWriter {
             String rawName = var.substring(1);
             sb.append("<").append(rawName).append(">{");
             sb.append(var);
-            sb.append("}<").append("\\").append(rawName).append(">");
+            sb.append("}<").append("/").append(rawName).append(">");
             sb.append(",\n");
         }
         sb.deleteCharAt(sb.length()-2);  // remove last comma
-        sb.append("}<\\tuple>,\n");
+        sb.append("}</tuple>,\n");
         return sb.toString();
     }
 
