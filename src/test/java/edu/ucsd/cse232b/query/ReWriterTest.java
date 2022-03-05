@@ -130,7 +130,7 @@ class ReWriterTest {
 
         when(ctxMocked.whereClause().cond().getText()).thenReturn("""
                 $aj eq "John" and
-                $af1 eq $af21 and $al1 eq $al21 and
+                $af1 eq $af21 and $al21 eq $al1 and
                 $af22 eq $af3 and $al22 eq $al3
                 """);
         when(ctxMocked.returnClause().xq().getText()).thenReturn("<triplet> {$b1, $b2, $b3} </triplet>");

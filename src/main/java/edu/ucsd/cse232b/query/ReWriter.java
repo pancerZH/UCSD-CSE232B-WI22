@@ -96,8 +96,13 @@ public class ReWriter {
                 if((varSet.contains(left) && forList.get(i).containsKey(right)) ||
                         (varSet.contains(right) && forList.get(i).containsKey(left))) {
                     // this is a match
-                    condLeft.add(left);
-                    condRight.add(right);
+                    if (varSet.contains(left)) {
+                        condLeft.add(left);
+                        condRight.add(right);
+                    } else {
+                        condLeft.add(right);
+                        condRight.add(left);
+                    }
                 }
             }
             if(!condLeft.isEmpty()) {
