@@ -5,6 +5,7 @@ import edu.ucsd.cse232b.parsers.QueryGrammarParser;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 public class ReWriter {
 
@@ -85,48 +86,68 @@ public class ReWriter {
         picked.add(0);
         Set<String> varSet = new HashSet<>(forList.get(0).keySet());
         sb.append(reWriterList.get(0).convertToString());
-        for(int i=1; i<forList.size(); i++) {
-            if(picked.contains(i)) {
-                continue;
-            }
-            List<String> condLeft = new ArrayList<>();
-            List<String> condRight = new ArrayList<>();
-            for(Map.Entry<String, String> entry : whereList.get(i).entrySet()) {
-                String left = entry.getKey(), right = entry.getValue();
-                if((varSet.contains(left) && forList.get(i).containsKey(right)) ||
-                        (varSet.contains(right) && forList.get(i).containsKey(left))) {
-                    // this is a match
-                    if (varSet.contains(left)) {
-                        condLeft.add(left);
-                        condRight.add(right);
-                    } else {
-                        condLeft.add(right);
-                        condRight.add(left);
+        int beforeLength = 1;
+        while(picked.size() != forList.size()) {
+            for(int i=1; i<forList.size(); i++) {
+                if(picked.contains(i)) {
+                    continue;
+                }
+                List<String> condLeft = new ArrayList<>();
+                List<String> condRight = new ArrayList<>();
+                for(Map.Entry<String, String> entry : whereList.get(i).entrySet()) {
+                    String left = entry.getKey(), right = entry.getValue();
+                    if((varSet.contains(left) && forList.get(i).containsKey(right)) ||
+                            (varSet.contains(right) && forList.get(i).containsKey(left))) {
+                        // this is a match
+                        if (varSet.contains(left)) {
+                            condLeft.add(left);
+                            condRight.add(right);
+                        } else {
+                            condLeft.add(right);
+                            condRight.add(left);
+                        }
                     }
                 }
+                if(!condLeft.isEmpty()) {
+                    // so existing sub for clause could join with the ith for clause
+                    picked.add(i);
+                    varSet.addAll(forList.get(i).keySet());
+                    sb.insert(0, "join (");
+                    sb.append(reWriterList.get(i).convertToString());
+                    sb.append("[");
+                    for(String left : condLeft) {
+                        sb.append(left.substring(1));  // remove $
+                        sb.append(",");
+                    }
+                    sb.deleteCharAt(sb.length()-1);  // remove last comma
+                    sb.append("], ");
+                    sb.append("[");
+                    for(String right : condRight) {
+                        sb.append(right.substring(1));  // remove $
+                        sb.append(",");
+                    }
+                    sb.deleteCharAt(sb.length()-1);  // remove last comma
+                    sb.append("]");
+                    sb.append("\n");
+                    sb.append("),\n");
+                }
             }
-            if(!condLeft.isEmpty()) {
-                // so existing sub for clause could join with the ith for clause
-                picked.add(i);
-                varSet.addAll(forList.get(i).keySet());
+
+            if(beforeLength == picked.size()) {
+                int index = IntStream.range(0, forList.size()).filter(i -> !picked.contains(i)).findFirst().orElse(-1);
+                if(index == -1) {
+                    beforeLength = picked.size();
+                    continue;
+                }
+                // here we get some group(s) that currently has no join conditions
+                // empty join (cartesian product)
+                picked.add(index);
+                varSet.addAll(forList.get(index).keySet());
                 sb.insert(0, "join (");
-                sb.append(reWriterList.get(i).convertToString());
-                sb.append("[");
-                for(String left : condLeft) {
-                    sb.append(left.substring(1));  // remove $
-                    sb.append(",");
-                }
-                sb.deleteCharAt(sb.length()-1);  // remove last comma
-                sb.append("], ");
-                sb.append("[");
-                for(String right : condRight) {
-                    sb.append(right.substring(1));  // remove $
-                    sb.append(",");
-                }
-                sb.deleteCharAt(sb.length()-1);  // remove last comma
-                sb.append("]");
-                sb.append("\n");
-                sb.append("),\n");
+                sb.append(reWriterList.get(index).convertToString());
+                sb.append("[], []\n),\n");
+            } else {
+                beforeLength = picked.size();
             }
         }
         sb.deleteCharAt(sb.length()-2);
