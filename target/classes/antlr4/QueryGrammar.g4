@@ -7,15 +7,15 @@ import ExpressionGrammar;
     | LPR xq RPR #ParaXq | xq COMMA xq #BinaryXq | xq pathOp rp #RpXq
     | startTag LBB xq RBB endTag #TagXq
     | forClause (letClause)? (whereClause)? returnClause #ForXq
-    | letClause xq #LetXq;
+    | letClause xq #LetXq
+    | joinClause #JoinXq;
 
-constanList: LSB ID (COMMA ID)* RSB;
-joinClause: JOIN LPR xq COMMA xq COMMA constanList COMMA constanList RPR
-    | JOIN LPR joinClause COMMA xq COMMA constanList COMMA constanList RPR
-    | JOIN LPR xq COMMA joinClause COMMA constanList COMMA constanList RPR;
+constantList: LSB ID (COMMA ID)* RSB;
+joinClause: JOIN LPR xq COMMA xq COMMA constantList COMMA constantList RPR #Join1
+    | JOIN LPR joinClause COMMA xq COMMA constantList COMMA constantList RPR #Join2
+    | JOIN LPR xq COMMA joinClause COMMA constantList COMMA constantList RPR #Join3;
 
-forClause: FOR VAR IN xq (COMMA VAR IN xq)*
-    | FOR VAR IN joinClause ;  // could have multiple (at least 1) sub expressions
+forClause: FOR VAR IN xq (COMMA VAR IN xq)*;  // could have multiple (at least 1) sub expressions
 letClause: LET VAR ASSIGN xq (COMMA VAR ASSIGN xq)*;
 whereClause: WHERE cond;
 returnClause: RETURN xq;

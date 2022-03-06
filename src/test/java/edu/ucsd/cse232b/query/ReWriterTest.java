@@ -1,9 +1,12 @@
 package edu.ucsd.cse232b.query;
 
 import edu.ucsd.cse232b.parsers.QueryGrammarParser;
+import edu.ucsd.cse232b.xquery.Xquery;
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Node;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -348,5 +351,54 @@ class ReWriterTest {
                 return
                 <triplet> {$tuple/b1/*, $tuple/b2/*, $tuple/b3/*} </triplet>""";
         assertEquals(expectedRes, ReWriter.convert(ctxMocked));
+    }
+
+
+    @Test
+    void joinExecute() throws Exception {
+        String query;
+        Xquery xq = new Xquery();
+
+        System.out.println("Test testcase2:");
+        query = """
+                for $s in doc(\"j_caesar.xml\")//SPEAKER,
+                    $a in doc(\"j_caesar.xml\")//ACT,
+                    $t in $a/TITLE/text(),
+                    $s1 in $a//SPEAKER
+                where $t = "ACT V" and $s1 eq $s
+                return <when>{$a/TITLE/text()}</when>""";
+        long t1 = System.currentTimeMillis();
+        List<Node> result1 = xq.evaluate(query);
+        long t2 = System.currentTimeMillis();
+        System.out.printf("returned results: %d\n", result1.size());
+//        xq.transform(result1);
+
+        String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
+        String expected = """
+                for $tuple in join (for $s in doc("j_caesar.xml")//SPEAKER
+                return <tuple>{
+                <s>{$s}</s>
+                }</tuple>,
+                for $a in doc("j_caesar.xml")//ACT,
+                $t in $a/TITLE/text(),
+                $s1 in $a//SPEAKER
+                where $t eq "ACT V"
+                return <tuple>{
+                <a>{$a}</a>,
+                <t>{$t}</t>,
+                <s1>{$s1}</s1>
+                }</tuple>,
+                [s], [s1]
+                )
+                return
+                <when>{$tuple/a/*/TITLE/text()}</when>""";
+        assertEquals(expected, rewritten);
+        long t3 = System.currentTimeMillis();
+        List<Node> result2 = xq.evaluate(rewritten);
+        long t4 = System.currentTimeMillis();
+
+        assertEquals(result1.size(), result2.size());
+        System.out.printf("nested loop join time: %d\n", t2 - t1);
+        System.out.printf("hash join time: %d\n", t4 - t3);
     }
 }

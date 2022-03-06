@@ -1,6 +1,8 @@
 package edu.ucsd.cse232b.xquery;
 
 import edu.ucsd.cse232b.expression.AbsolutePath;
+import edu.ucsd.cse232b.parsers.ExpressionGrammarLexer;
+import edu.ucsd.cse232b.parsers.ExpressionGrammarParser;
 import edu.ucsd.cse232b.parsers.QueryGrammarLexer;
 import edu.ucsd.cse232b.parsers.QueryGrammarParser;
 import edu.ucsd.cse232b.query.Query;
@@ -32,11 +34,14 @@ public class Xquery {
         this.mockDocument = documentBuilder.newDocument();
     }
 
-    public List<Node> evaluate(String path) throws Exception {
+    public QueryGrammarParser parse(String path)  {
         final QueryGrammarLexer lexer = new QueryGrammarLexer(CharStreams.fromString(path));
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
-        final QueryGrammarParser parser = new QueryGrammarParser(tokens);
-        final ParserRuleContext tree = parser.xq();
+        return new QueryGrammarParser(tokens);
+    }
+
+    public List<Node> evaluate(String path) throws Exception {
+        final ParserRuleContext tree = this.parse(path).xq();
         QueryBuilder qb = new QueryBuilder(this.mockDocument);
         final Query root = qb.visit(tree);
         return root.evaluate(this.mockDocument);

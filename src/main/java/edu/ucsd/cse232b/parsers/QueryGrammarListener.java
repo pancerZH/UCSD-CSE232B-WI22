@@ -58,6 +58,18 @@ public interface QueryGrammarListener extends ParseTreeListener {
 	 */
 	void exitApXq(QueryGrammarParser.ApXqContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code JoinXq}
+	 * labeled alternative in {@link QueryGrammarParser#xq}.
+	 * @param ctx the parse tree
+	 */
+	void enterJoinXq(QueryGrammarParser.JoinXqContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code JoinXq}
+	 * labeled alternative in {@link QueryGrammarParser#xq}.
+	 * @param ctx the parse tree
+	 */
+	void exitJoinXq(QueryGrammarParser.JoinXqContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code BinaryXq}
 	 * labeled alternative in {@link QueryGrammarParser#xq}.
 	 * @param ctx the parse tree
@@ -118,25 +130,51 @@ public interface QueryGrammarListener extends ParseTreeListener {
 	 */
 	void exitTagXq(QueryGrammarParser.TagXqContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link QueryGrammarParser#constanList}.
+	 * Enter a parse tree produced by {@link QueryGrammarParser#constantList}.
 	 * @param ctx the parse tree
 	 */
-	void enterConstanList(QueryGrammarParser.ConstanListContext ctx);
+	void enterConstantList(QueryGrammarParser.ConstantListContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link QueryGrammarParser#constanList}.
+	 * Exit a parse tree produced by {@link QueryGrammarParser#constantList}.
 	 * @param ctx the parse tree
 	 */
-	void exitConstanList(QueryGrammarParser.ConstanListContext ctx);
+	void exitConstantList(QueryGrammarParser.ConstantListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link QueryGrammarParser#joinClause}.
+	 * Enter a parse tree produced by the {@code Join1}
+	 * labeled alternative in {@link QueryGrammarParser#joinClause}.
 	 * @param ctx the parse tree
 	 */
-	void enterJoinClause(QueryGrammarParser.JoinClauseContext ctx);
+	void enterJoin1(QueryGrammarParser.Join1Context ctx);
 	/**
-	 * Exit a parse tree produced by {@link QueryGrammarParser#joinClause}.
+	 * Exit a parse tree produced by the {@code Join1}
+	 * labeled alternative in {@link QueryGrammarParser#joinClause}.
 	 * @param ctx the parse tree
 	 */
-	void exitJoinClause(QueryGrammarParser.JoinClauseContext ctx);
+	void exitJoin1(QueryGrammarParser.Join1Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Join2}
+	 * labeled alternative in {@link QueryGrammarParser#joinClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterJoin2(QueryGrammarParser.Join2Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Join2}
+	 * labeled alternative in {@link QueryGrammarParser#joinClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitJoin2(QueryGrammarParser.Join2Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Join3}
+	 * labeled alternative in {@link QueryGrammarParser#joinClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterJoin3(QueryGrammarParser.Join3Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Join3}
+	 * labeled alternative in {@link QueryGrammarParser#joinClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitJoin3(QueryGrammarParser.Join3Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link QueryGrammarParser#forClause}.
 	 * @param ctx the parse tree

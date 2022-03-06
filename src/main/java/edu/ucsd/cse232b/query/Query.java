@@ -58,7 +58,8 @@ public interface Query {
         SatCond,
         ParaCond,
         CompoundCond,
-        NegCond
+        NegCond,
+        Join
     }
 
     enum PathOp {

@@ -38,8 +38,10 @@ edu\ucsd\cse232b\parsers\QueryGrammarParser$ForXqContext.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$ParaFtContext.class
 edu\ucsd\cse232b\expression\NegFt.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$EndTagContext.class
+edu\ucsd\cse232b\parsers\QueryGrammarParser$Join3Context.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$DocNameContext.class
 edu\ucsd\cse232b\expression\Expression.class
+edu\ucsd\cse232b\parsers\QueryGrammarParser$Join1Context.class
 edu\ucsd\cse232b\xquery\Milestone2SolvedTest.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$ApContext.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$DocNameContext.class
@@ -70,6 +72,7 @@ edu\ucsd\cse232b\xquery\QueryBuilder.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$FileNameContext.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$StartTagContext.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarListener.class
+edu\ucsd\cse232b\parsers\QueryGrammarParser$ConstantListContext.class
 edu\ucsd\cse232b\xpath\ExpressionBuilder.class
 edu\ucsd\cse232b\xquery\Milestone2Test.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$BinaryRp2Context.class
@@ -91,9 +94,11 @@ edu\ucsd\cse232b\parsers\QueryGrammarParser$WhereClauseContext.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$UnaryRp3Context.class
 edu\ucsd\cse232b\expression\BinaryConstantFt.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$ParaRpContext.class
+edu\ucsd\cse232b\query\Join.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$JoinClauseContext.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$CompoundFtContext.class
 edu\ucsd\cse232b\query\IsCond.class
+edu\ucsd\cse232b\parsers\QueryGrammarParser$Join2Context.class
 edu\ucsd\cse232b\query\Query$QueryKind.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$BinaryFt2Context.class
 edu\ucsd\cse232b\expression\BinaryFt$1.class
@@ -115,7 +120,6 @@ edu\ucsd\cse232b\expression\Expression$ExpressionKind.class
 edu\ucsd\cse232b\expression\ParaFt.class
 edu\ucsd\cse232b\xpath\Main.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$LetXqContext.class
-edu\ucsd\cse232b\parsers\QueryGrammarParser$ConstanListContext.class
 edu\ucsd\cse232b\parsers\ExpressionGrammarParser$NegFtContext.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$AttNameContext.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$ApXqContext.class
@@ -125,6 +129,7 @@ edu\ucsd\cse232b\expression\BinaryRp$Op.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$IsCond2Context.class
 edu\ucsd\cse232b\expression\UnaryRp$1.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$BinaryFt1Context.class
+edu\ucsd\cse232b\parsers\QueryGrammarParser$JoinXqContext.class
 edu\ucsd\cse232b\expression\AbsolutePath.class
 edu\ucsd\cse232b\expression\CompoundFt$CONJ.class
 edu\ucsd\cse232b\parsers\QueryGrammarParser$FilterContext.class

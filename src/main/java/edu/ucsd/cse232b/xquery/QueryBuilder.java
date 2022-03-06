@@ -29,6 +29,52 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
         this.expBuilder = new ExpressionBuilder();
     }
 
+    @Override public Query visitJoinXq(QueryGrammarParser.JoinXqContext ctx) {
+        return visitChildren(ctx);
+    }
+
+    @Override public Query visitJoin1(QueryGrammarParser.Join1Context ctx) {
+        Query left = visit(ctx.xq(0));
+        Query right = visit(ctx.xq(1));
+        List<String> leftAtt = new ArrayList<>();
+        for (int i = 0; i < ctx.constantList(0).ID().size(); i ++) {
+            leftAtt.add(ctx.constantList(0).ID(i).getText());
+        }
+        List<String> rightAtt = new ArrayList<>();
+        for (int i = 0; i < ctx.constantList(1).ID().size(); i ++) {
+            rightAtt.add(ctx.constantList(1).ID(i).getText());
+        }
+        return new Join(left, right, leftAtt, rightAtt);
+    }
+
+    @Override public Query visitJoin2(QueryGrammarParser.Join2Context ctx) {
+        Query left = visit(ctx.joinClause());
+        Query right = visit(ctx.xq());
+        List<String> leftAtt = new ArrayList<>();
+        for (int i = 0; i < ctx.constantList(0).ID().size(); i ++) {
+            leftAtt.add(ctx.constantList(0).ID(i).getText());
+        }
+        List<String> rightAtt = new ArrayList<>();
+        for (int i = 0; i < ctx.constantList(1).ID().size(); i ++) {
+            rightAtt.add(ctx.constantList(1).ID(i).getText());
+        }
+        return new Join(left, right, leftAtt, rightAtt);
+    }
+
+    @Override public Query visitJoin3(QueryGrammarParser.Join3Context ctx) {
+        Query left = visit(ctx.xq());
+        Query right = visit(ctx.joinClause());
+        List<String> leftAtt = new ArrayList<>();
+        for (int i = 0; i < ctx.constantList(0).ID().size(); i ++) {
+            leftAtt.add(ctx.constantList(0).ID(i).getText());
+        }
+        List<String> rightAtt = new ArrayList<>();
+        for (int i = 0; i < ctx.constantList(1).ID().size(); i ++) {
+            rightAtt.add(ctx.constantList(1).ID(i).getText());
+        }
+        return new Join(left, right, leftAtt, rightAtt);
+    }
+
     @Override public Query visitRpXq(QueryGrammarParser.RpXqContext ctx) {
         Query query = visit(ctx.xq());
         Expression exp = this.expBuilder.visit(xpath.parse(ctx.rp().getText()).rp());

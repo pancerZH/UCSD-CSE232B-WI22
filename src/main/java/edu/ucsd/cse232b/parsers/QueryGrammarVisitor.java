@@ -41,6 +41,13 @@ public interface QueryGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitApXq(QueryGrammarParser.ApXqContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code JoinXq}
+	 * labeled alternative in {@link QueryGrammarParser#xq}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitJoinXq(QueryGrammarParser.JoinXqContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code BinaryXq}
 	 * labeled alternative in {@link QueryGrammarParser#xq}.
 	 * @param ctx the parse tree
@@ -76,17 +83,32 @@ public interface QueryGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTagXq(QueryGrammarParser.TagXqContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link QueryGrammarParser#constanList}.
+	 * Visit a parse tree produced by {@link QueryGrammarParser#constantList}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitConstanList(QueryGrammarParser.ConstanListContext ctx);
+	T visitConstantList(QueryGrammarParser.ConstantListContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link QueryGrammarParser#joinClause}.
+	 * Visit a parse tree produced by the {@code Join1}
+	 * labeled alternative in {@link QueryGrammarParser#joinClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitJoinClause(QueryGrammarParser.JoinClauseContext ctx);
+	T visitJoin1(QueryGrammarParser.Join1Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Join2}
+	 * labeled alternative in {@link QueryGrammarParser#joinClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitJoin2(QueryGrammarParser.Join2Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Join3}
+	 * labeled alternative in {@link QueryGrammarParser#joinClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitJoin3(QueryGrammarParser.Join3Context ctx);
 	/**
 	 * Visit a parse tree produced by {@link QueryGrammarParser#forClause}.
 	 * @param ctx the parse tree

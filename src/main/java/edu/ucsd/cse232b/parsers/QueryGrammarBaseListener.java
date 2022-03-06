@@ -66,6 +66,18 @@ public class QueryGrammarBaseListener implements QueryGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterJoinXq(QueryGrammarParser.JoinXqContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJoinXq(QueryGrammarParser.JoinXqContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBinaryXq(QueryGrammarParser.BinaryXqContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -126,25 +138,49 @@ public class QueryGrammarBaseListener implements QueryGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstanList(QueryGrammarParser.ConstanListContext ctx) { }
+	@Override public void enterConstantList(QueryGrammarParser.ConstantListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConstanList(QueryGrammarParser.ConstanListContext ctx) { }
+	@Override public void exitConstantList(QueryGrammarParser.ConstantListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJoinClause(QueryGrammarParser.JoinClauseContext ctx) { }
+	@Override public void enterJoin1(QueryGrammarParser.Join1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJoinClause(QueryGrammarParser.JoinClauseContext ctx) { }
+	@Override public void exitJoin1(QueryGrammarParser.Join1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJoin2(QueryGrammarParser.Join2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJoin2(QueryGrammarParser.Join2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJoin3(QueryGrammarParser.Join3Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJoin3(QueryGrammarParser.Join3Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
