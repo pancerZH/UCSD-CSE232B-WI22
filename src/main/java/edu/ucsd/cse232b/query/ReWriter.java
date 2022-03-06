@@ -86,8 +86,8 @@ public class ReWriter {
         picked.add(0);
         Set<String> varSet = new HashSet<>(forList.get(0).keySet());
         sb.append(reWriterList.get(0).convertToString());
-        int beforeLength = 1;
         while(picked.size() != forList.size()) {
+            int beforeLength = picked.size();
             for(int i=1; i<forList.size(); i++) {
                 if(picked.contains(i)) {
                     continue;
@@ -136,7 +136,6 @@ public class ReWriter {
             if(beforeLength == picked.size()) {
                 int index = IntStream.range(0, forList.size()).filter(i -> !picked.contains(i)).findFirst().orElse(-1);
                 if(index == -1) {
-                    beforeLength = picked.size();
                     continue;
                 }
                 // here we get some group(s) that currently has no join conditions
@@ -146,8 +145,6 @@ public class ReWriter {
                 sb.insert(0, "join (");
                 sb.append(reWriterList.get(index).convertToString());
                 sb.append("[], []\n),\n");
-            } else {
-                beforeLength = picked.size();
             }
         }
         sb.deleteCharAt(sb.length()-2);
