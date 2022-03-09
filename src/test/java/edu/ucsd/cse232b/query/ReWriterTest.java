@@ -355,11 +355,10 @@ class ReWriterTest {
 
 
     @Test
-    void joinExecute() throws Exception {
+    void joinExecute1() throws Exception {
         String query;
         Xquery xq = new Xquery();
 
-        System.out.println("Test testcase2:");
         query = """
                 for $s in doc(\"j_caesar.xml\")//SPEAKER,
                     $a in doc(\"j_caesar.xml\")//ACT,
@@ -392,6 +391,51 @@ class ReWriterTest {
                 )
                 return
                 <when>{$tuple/a/*/TITLE/text()}</when>""";
+        assertEquals(expected, rewritten);
+        long t3 = System.currentTimeMillis();
+        List<Node> result2 = xq.evaluate(rewritten);
+        long t4 = System.currentTimeMillis();
+
+        assertEquals(result1.size(), result2.size());
+        System.out.printf("nested loop join time: %d\n", t2 - t1);
+        System.out.printf("hash join time: %d\n", t4 - t3);
+    }
+
+    @Test
+    void joinExecute2() throws Exception {
+        String query;
+        Xquery xq = new Xquery();
+
+        query = """
+                for $s in doc("j_caesar.xml")//SPEAKER, $a in doc("j_caesar.xml")//ACT,         
+                    $sp in $a//SPEAKER, $stxt in $s/text()
+                where $sp eq $s and $stxt = "CAESAR"
+                return <act> { $a/TITLE/text()} </act>""";
+        long t1 = System.currentTimeMillis();
+        List<Node> result1 = xq.evaluate(query);
+        long t2 = System.currentTimeMillis();
+        System.out.printf("returned results: %d\n", result1.size());
+//        xq.transform(result1);
+
+        String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
+        String expected = """
+                for $tuple in join (for $s in doc("j_caesar.xml")//SPEAKER,
+                $stxt in $s/text()
+                where $stxt eq "CAESAR"
+                return <tuple>{
+                <s>{$s}</s>,
+                <stxt>{$stxt}</stxt>
+                }</tuple>,
+                for $a in doc("j_caesar.xml")//ACT,
+                $sp in $a//SPEAKER
+                return <tuple>{
+                <a>{$a}</a>,
+                <sp>{$sp}</sp>
+                }</tuple>,
+                [s], [sp]
+                )
+                return
+                <act>{$tuple/a/*/TITLE/text()}</act>""";
         assertEquals(expected, rewritten);
         long t3 = System.currentTimeMillis();
         List<Node> result2 = xq.evaluate(rewritten);
