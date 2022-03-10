@@ -445,4 +445,53 @@ class ReWriterTest {
         System.out.printf("nested loop join time: %d\n", t2 - t1);
         System.out.printf("hash join time: %d\n", t4 - t3);
     }
+
+    @Test
+    void joinExecute3() throws Exception {
+        String query;
+        Xquery xq = new Xquery();
+
+        query = """
+                for $a1 in doc("j_caesar.xml")//PERSONAE,
+                $a2 in $a1//PERSONA/text(),
+                $a4 in $a1//GRPDESCR,
+                $b1 in doc("j_caesar.xml")//PERSONAE,
+                $b2 in $b1//PERSONA/text()
+                where $a2 eq $b2 and $a2 eq "MARULLUS"
+                return <res> {$a2, $a4} </res>""";
+        long t1 = System.currentTimeMillis();
+        List<Node> result1 = xq.evaluate(query);
+        long t2 = System.currentTimeMillis();
+        System.out.printf("returned results: %d\n", result1.size());
+
+        String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
+        String expected = """
+                for $tuple in join (for $a1 in doc("j_caesar.xml")//PERSONAE,
+                $a2 in $a1//PERSONA/text(),
+                $a4 in $a1//GRPDESCR
+                where $a2 eq "MARULLUS"
+                return <tuple>{
+                <a1>{$a1}</a1>,
+                <a2>{$a2}</a2>,
+                <a4>{$a4}</a4>
+                }</tuple>,
+                for $b1 in doc("j_caesar.xml")//PERSONAE,
+                $b2 in $b1//PERSONA/text()
+                return <tuple>{
+                <b1>{$b1}</b1>,
+                <b2>{$b2}</b2>
+                }</tuple>,
+                [a2], [b2]
+                )
+                return
+                <res>{$tuple/a2/*,$tuple/a4/*}</res>""";
+        assertEquals(expected, rewritten);
+        long t3 = System.currentTimeMillis();
+        List<Node> result2 = xq.evaluate(rewritten);
+        long t4 = System.currentTimeMillis();
+
+        assertEquals(result1.size(), result2.size());
+        System.out.printf("nested loop join time: %d\n", t2 - t1);
+        System.out.printf("hash join time: %d\n", t4 - t3);
+    }
 }

@@ -97,7 +97,7 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
         try {
             list = this.xpath.evaluate(ctx.ap().getText());
         } catch (Exception e) {
-            list = List.of();
+            list = new ArrayList<>();
             e.printStackTrace();
         }
         return new ApXq(list);
@@ -110,7 +110,8 @@ public class QueryBuilder extends QueryGrammarBaseVisitor<Query> {
     }
 
     @Override public Query visitVarXq(QueryGrammarParser.VarXqContext ctx) {
-        return new VarXq(this.contextMap.get(ctx.VAR().getText()));
+        List<Node> res = new ArrayList<>(this.contextMap.get(ctx.VAR().getText()));
+        return new VarXq(res);
     }
 
     @Override public Query visitLetXq(QueryGrammarParser.LetXqContext ctx) {
