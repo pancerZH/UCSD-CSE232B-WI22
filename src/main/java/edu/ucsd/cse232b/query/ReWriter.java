@@ -1,6 +1,7 @@
 package edu.ucsd.cse232b.query;
 
 import edu.ucsd.cse232b.parsers.QueryGrammarParser;
+import org.antlr.v4.runtime.misc.Pair;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -45,9 +46,9 @@ public class ReWriter {
 
         // now we have a list of for clauses
         // then build condition map from it
-        List<Map<String, String>> whereList = new ArrayList<>();
+        List<List<Pair<String, String>>> whereList = new ArrayList<>();
         for(Map<String, String> ignored : forList) {
-            whereList.add(new HashMap<>());
+            whereList.add(new ArrayList<>());
         }
         String[] wheres = ctx.whereClause().cond().getText().split("and");
         for (String where : wheres) {
@@ -58,7 +59,7 @@ public class ReWriter {
             for (int i = 0; i < forList.size(); i++) {
                 if (forList.get(i).containsKey(left) || forList.get(i).containsKey(right)) {
                     // a join condition must involve two sub for clause
-                    whereList.get(i).put(left, right);
+                    whereList.get(i).add(new Pair<>(left, right));
                 }
             }
 
@@ -69,7 +70,7 @@ public class ReWriter {
         for(int i=0; i<forList.size(); i++) {
             ReWriter reWriter = ReWriter.generateReWriter();
             reWriter.setForMap(forList.get(i), forOrderList.get(i));
-            reWriter.setCondMap(whereList.get(i));
+            reWriter.setCondList(whereList.get(i));
             reWriterList.add(reWriter);
         }
 
@@ -94,8 +95,8 @@ public class ReWriter {
                 }
                 List<String> condLeft = new ArrayList<>();
                 List<String> condRight = new ArrayList<>();
-                for(Map.Entry<String, String> entry : whereList.get(i).entrySet()) {
-                    String left = entry.getKey(), right = entry.getValue();
+                for(Pair<String, String> pair : whereList.get(i)) {
+                    String left = pair.a, right = pair.b;
                     if((varSet.contains(left) && forList.get(i).containsKey(right)) ||
                             (varSet.contains(right) && forList.get(i).containsKey(left))) {
                         // this is a match
@@ -183,7 +184,7 @@ public class ReWriter {
     private final Map<Integer, String> forOrderMap;
     // where [xq1] [cond] [xq2]
     // map: <xq1, xq2> -> cond
-    private final Map<String, String> condMap;
+    private final List<Pair<String, String>> condList;
 
     public static ReWriter generateReWriter() {
         return new ReWriter();
@@ -192,7 +193,7 @@ public class ReWriter {
     private ReWriter() {
         this.forMap = new HashMap<>();
         this.forOrderMap = new HashMap<>();
-        this.condMap = new HashMap<>();
+        this.condList = new ArrayList<>();
     }
 
     public void setForMap(Map<String, String> map, Map<Integer, String> order) {
@@ -201,9 +202,9 @@ public class ReWriter {
         this.forOrderMap.putAll(order);
     }
 
-    public void setCondMap(Map<String, String> map) {
-        this.condMap.clear();
-        this.condMap.putAll(map);
+    public void setCondList(List<Pair<String, String>> list) {
+        this.condList.clear();
+        this.condList.addAll(list);
     }
 
     private String convertForClause() {
@@ -226,18 +227,18 @@ public class ReWriter {
         // to see whether we can push down any selection
         StringBuilder sb = new StringBuilder("where ");
         boolean pushDown = false;
-        for(Map.Entry<String, String> entry : this.condMap.entrySet()) {
-            String condRoot1 = entry.getKey().split("/")[0];
-            String condRoot2 = entry.getValue().split("/")[0];
+        for(Pair<String, String> pair : this.condList) {
+            String condRoot1 = pair.a.split("/")[0];
+            String condRoot2 = pair.b.split("/")[0];
             if((this.forMap.containsKey(condRoot1) && this.forMap.containsKey(condRoot2)) ||
                     (this.forMap.containsKey(condRoot1) && !condRoot2.startsWith("$")) ||
                     (this.forMap.containsKey(condRoot2) && !condRoot1.startsWith("$"))) {
                 if(!pushDown) {
                     pushDown = true;
                 }
-                sb.append(entry.getKey());
+                sb.append(pair.a);
                 sb.append(" eq ");
-                sb.append(entry.getValue());
+                sb.append(pair.b);
                 sb.append(",\n");
             }
         }

@@ -2,9 +2,11 @@ package edu.ucsd.cse232b.query;
 
 import edu.ucsd.cse232b.parsers.QueryGrammarParser;
 import edu.ucsd.cse232b.xquery.Xquery;
+import org.antlr.v4.runtime.misc.Pair;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Node;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,13 +33,13 @@ class ReWriterTest {
         orderMap.put(3, "$af1");
         orderMap.put(4, "$al1");
 
-        Map<String, String> condMap = new HashMap<>();
-        condMap.put("$aj", "John");
-        condMap.put("$af1", "$af21");
-        condMap.put("$al1", "$al21");
+        List<Pair<String, String>> condMap = new ArrayList<>();
+        condMap.add(new Pair<>("$aj", "John"));
+        condMap.add(new Pair<>("$af1", "$af21"));
+        condMap.add(new Pair<>("$al1", "$al21"));
 
         reWriter.setForMap(forMap, orderMap);
-        reWriter.setCondMap(condMap);
+        reWriter.setCondList(condMap);
 
         String expectedRes = """
                 for $b1 in doc("input")/book,
@@ -167,7 +169,7 @@ class ReWriterTest {
                 <af22>{$af22}</af22>,
                 <al22>{$al22}</al22>
                 }</tuple>,
-                [al1,af1], [al21,af21]
+                [af1,al1], [af21,al21]
                 ),
                 for $b3 in doc("input")/book,
                 $a3 in $b3/author,
@@ -334,7 +336,7 @@ class ReWriterTest {
                 <af22>{$af22}</af22>,
                 <al22>{$al22}</al22>
                 }</tuple>,
-                [al1,af1], [al21,af21]
+                [af1,al1], [af21,al21]
                 ),
                 for $b3 in doc("input")/book,
                 $a3 in $b3/author,
@@ -552,7 +554,7 @@ class ReWriterTest {
                 <speb>{$speb}</speb>,
                 <sped>{$sped}</sped>
                 }</tuple>,
-                [sa,spa,spea,spec], [sb,spc,sped,speb]
+                [sa,spa,spec,spea], [sb,spc,speb,sped]
                 )
                 return
                 <result>{<title>{$tuple/sa/*/TITLE/text()}</title>,<speaker>{$tuple/spa/*/*}</speaker>}</result>""";
@@ -605,7 +607,7 @@ class ReWriterTest {
                 for $tuple in join (join (join (for $a1 in doc("j_caesar_M3.xml")//ACT,
                 $sc1 in $a1//SCENE,
                 $sp1 in $sc1//SPEAKER/text()
-                where $sp1 = "FLAVIUS"
+                where $sp1 eq "FLAVIUS"
                 return <tuple>{
                 <a1>{$a1}</a1>,
                 <sc1>{$sc1}</sc1>,
