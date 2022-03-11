@@ -569,7 +569,375 @@ class ReWriterTest {
     }
 
     @Test
-    void rewrite1() throws Exception {
+    void m3test1() throws Exception {
+        String query;
+        Xquery xq = new Xquery();
+
+        query = """
+                for
+                    $act in doc("j_caesar.xml")//ACT,
+                    $title in $act/SCENE/TITLE,
+                    $speaker1 in $act//SPEAKER/text(),
+                    $speaker2 in $act//SPEAKER/text(),
+                    $pg in doc("j_caesar.xml")//PGROUP,
+                    $persona1 in $pg/PERSONA/text(),
+                    $persona2 in $pg/PERSONA/text()
+                               
+                where $speaker1 eq $persona1 and $speaker2 eq $persona2
+                               
+                return
+                    <tuple>{
+                        <scene>{$title/text()}</scene>,
+                        <persona1>{$persona1}</persona1>,
+                        <persona2>{$persona2}</persona2>
+                    }</tuple>
+                """;
+        long t1 = System.currentTimeMillis();
+        List<Node> result1 = xq.evaluate(query);
+        long t2 = System.currentTimeMillis();
+        System.out.printf("returned results: %d\n", result1.size());
+
+        String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
+        String expected = """
+                for $tuple in join (for $act in doc("j_caesar.xml")//ACT,
+                $title in $act/SCENE/TITLE,
+                $speaker1 in $act//SPEAKER/text(),
+                $speaker2 in $act//SPEAKER/text()
+                return <tuple>{
+                <act>{$act}</act>,
+                <title>{$title}</title>,
+                <speaker1>{$speaker1}</speaker1>,
+                <speaker2>{$speaker2}</speaker2>
+                }</tuple>,
+                for $pg in doc("j_caesar.xml")//PGROUP,
+                $persona1 in $pg/PERSONA/text(),
+                $persona2 in $pg/PERSONA/text()
+                return <tuple>{
+                <pg>{$pg}</pg>,
+                <persona1>{$persona1}</persona1>,
+                <persona2>{$persona2}</persona2>
+                }</tuple>,
+                [speaker1,speaker2], [persona1,persona2]
+                )
+                return
+                <tuple>{<scene>{$tuple/title/*/text()}</scene>,<persona1>{$tuple/persona1/*}</persona1>,<persona2>{$tuple/persona2/*}</persona2>}</tuple>""";
+        assertEquals(expected, rewritten);
+        long t3 = System.currentTimeMillis();
+        List<Node> result2 = xq.evaluate(rewritten);
+        long t4 = System.currentTimeMillis();
+
+        assertEquals(result1.size(), result2.size());
+        System.out.printf("nested loop join time: %d\n", t2 - t1);
+        System.out.printf("hash join time: %d\n", t4 - t3);
+    }
+
+    @Test
+    void m3test2() throws Exception {
+        String query;
+        Xquery xq = new Xquery();
+
+        query = """
+                for $a in doc("j_caesar.xml")//ACT,
+                    $b in doc("j_caesar.xml")//ACT,
+                    $sa in $a//SCENE,
+                    $sb in $b//SCENE,
+                    $spa in $sa//SPEAKER,
+                    $spb in $sb//SPEAKER/text(),
+                    $spc in $sb//SPEAKER
+                                
+                where $spb="FLAVIUS" and $sa eq $sb and $spa eq $spc
+                                
+                return <result>{ <title>{$sa/TITLE/text()}</title> }</result>
+                """;
+        long t1 = System.currentTimeMillis();
+        List<Node> result1 = xq.evaluate(query);
+        long t2 = System.currentTimeMillis();
+        System.out.printf("returned results: %d\n", result1.size());
+
+        String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
+        String expected = """
+                for $tuple in join (for $a in doc("j_caesar.xml")//ACT,
+                $sa in $a//SCENE,
+                $spa in $sa//SPEAKER
+                return <tuple>{
+                <a>{$a}</a>,
+                <sa>{$sa}</sa>,
+                <spa>{$spa}</spa>
+                }</tuple>,
+                for $b in doc("j_caesar.xml")//ACT,
+                $sb in $b//SCENE,
+                $spb in $sb//SPEAKER/text(),
+                $spc in $sb//SPEAKER
+                where $spb eq "FLAVIUS"
+                return <tuple>{
+                <b>{$b}</b>,
+                <sb>{$sb}</sb>,
+                <spb>{$spb}</spb>,
+                <spc>{$spc}</spc>
+                }</tuple>,
+                [sa,spa], [sb,spc]
+                )
+                return
+                <result>{<title>{$tuple/sa/*/TITLE/text()}</title>}</result>""";
+        assertEquals(expected, rewritten);
+        long t3 = System.currentTimeMillis();
+        List<Node> result2 = xq.evaluate(rewritten);
+        long t4 = System.currentTimeMillis();
+
+        assertEquals(result1.size(), result2.size());
+        System.out.printf("nested loop join time: %d\n", t2 - t1);
+        System.out.printf("hash join time: %d\n", t4 - t3);
+    }
+
+    @Test
+    void m3test3() throws Exception {
+        String query;
+        Xquery xq = new Xquery();
+
+        query = """
+                for $q1 in doc("j_caesar.xml")//ACT,
+                  $q2 in doc("j_caesar.xml")//ACT,
+                  $sa in $q1//SCENE,
+                  $sb in $q2//SCENE,
+                  $spa in $sa//SPEAKER,
+                  $spb in $sa//SPEAKER/text(),
+                  $spc in $sb//SPEAKER,
+                  $spd in $sb//SPEAKER/text(),
+                  $spea in $sa//SPEECH,
+                  $speb in $sb//SPEECH,
+                  $spec in $sa//SPEECH,
+                  $sped in $sb//SPEECH
+                                
+                                
+                where $spb="FLAVIUS" and $spd="FLAVIUS" and $sa eq $sb and $spa eq $spc and $speb eq $spec and $spea eq $sped
+                                
+                return <result>{ <title>{$sa/TITLE/text()}</title>, <speaker>{$spa/text()}</speaker> }</result>
+                """;
+        long t1 = System.currentTimeMillis();
+        List<Node> result1 = xq.evaluate(query);
+        long t2 = System.currentTimeMillis();
+        System.out.printf("returned results: %d\n", result1.size());
+
+        String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
+        String expected = """
+                for $tuple in join (for $q1 in doc("j_caesar.xml")//ACT,
+                $sa in $q1//SCENE,
+                $spa in $sa//SPEAKER,
+                $spb in $sa//SPEAKER/text(),
+                $spea in $sa//SPEECH,
+                $spec in $sa//SPEECH
+                where $spb eq "FLAVIUS"
+                return <tuple>{
+                <q1>{$q1}</q1>,
+                <sa>{$sa}</sa>,
+                <spa>{$spa}</spa>,
+                <spb>{$spb}</spb>,
+                <spea>{$spea}</spea>,
+                <spec>{$spec}</spec>
+                }</tuple>,
+                for $q2 in doc("j_caesar.xml")//ACT,
+                $sb in $q2//SCENE,
+                $spc in $sb//SPEAKER,
+                $spd in $sb//SPEAKER/text(),
+                $speb in $sb//SPEECH,
+                $sped in $sb//SPEECH
+                where $spd eq "FLAVIUS"
+                return <tuple>{
+                <q2>{$q2}</q2>,
+                <sb>{$sb}</sb>,
+                <spc>{$spc}</spc>,
+                <spd>{$spd}</spd>,
+                <speb>{$speb}</speb>,
+                <sped>{$sped}</sped>
+                }</tuple>,
+                [sa,spa,spec,spea], [sb,spc,speb,sped]
+                )
+                return
+                <result>{<title>{$tuple/sa/*/TITLE/text()}</title>,<speaker>{$tuple/spa/*/text()}</speaker>}</result>""";
+        assertEquals(expected, rewritten);
+        long t3 = System.currentTimeMillis();
+        List<Node> result2 = xq.evaluate(rewritten);
+        long t4 = System.currentTimeMillis();
+
+        assertEquals(result1.size(), result2.size());
+        System.out.printf("nested loop join time: %d\n", t2 - t1);
+        System.out.printf("hash join time: %d\n", t4 - t3);
+    }
+
+    @Test
+    void m3test4() throws Exception {
+        String query;
+        Xquery xq = new Xquery();
+
+        query = """
+                for $a in doc("j_caesar.xml")//ACT,
+                    $b in doc("j_caesar.xml")//ACT,
+                    $c in doc("j_caesar.xml")//ACT,
+                    $d in doc("j_caesar.xml")//ACT,
+                    $sa in $a//SCENE,
+                    $sb in $b//SCENE,
+                    $sc in $c//SCENE,
+                    $sd in $d//SCENE,
+                    $spa in $sa//SPEAKER,
+                    $spb in $sb//SPEAKER/text(),
+                    $spc in $sc//SPEAKER,
+                    $spd in $sd//SPEAKER
+                where $spb="FLAVIUS" and $sb eq $sc and $sa eq $sd and $spa eq $spc
+                return <result>{ <title>{$sa/TITLE/text()}</title> }</result>
+                """;
+        long t1 = System.currentTimeMillis();
+        List<Node> result1 = xq.evaluate(query);
+        long t2 = System.currentTimeMillis();
+        System.out.printf("returned results: %d\n", result1.size());
+
+        String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
+        String expected = """
+                for $tuple in join (join (join (for $a in doc("j_caesar.xml")//ACT,
+                $sa in $a//SCENE,
+                $spa in $sa//SPEAKER
+                return <tuple>{
+                <a>{$a}</a>,
+                <sa>{$sa}</sa>,
+                <spa>{$spa}</spa>
+                }</tuple>,
+                for $c in doc("j_caesar.xml")//ACT,
+                $sc in $c//SCENE,
+                $spc in $sc//SPEAKER
+                return <tuple>{
+                <c>{$c}</c>,
+                <sc>{$sc}</sc>,
+                <spc>{$spc}</spc>
+                }</tuple>,
+                [spa], [spc]
+                ),
+                for $d in doc("j_caesar.xml")//ACT,
+                $sd in $d//SCENE,
+                $spd in $sd//SPEAKER
+                return <tuple>{
+                <d>{$d}</d>,
+                <sd>{$sd}</sd>,
+                <spd>{$spd}</spd>
+                }</tuple>,
+                [sa], [sd]
+                ),
+                for $b in doc("j_caesar.xml")//ACT,
+                $sb in $b//SCENE,
+                $spb in $sb//SPEAKER/text()
+                where $spb eq "FLAVIUS"
+                return <tuple>{
+                <b>{$b}</b>,
+                <sb>{$sb}</sb>,
+                <spb>{$spb}</spb>
+                }</tuple>,
+                [sc], [sb]
+                )
+                return
+                <result>{<title>{$tuple/sa/*/TITLE/text()}</title>}</result>""";
+        assertEquals(expected, rewritten);
+        long t3 = System.currentTimeMillis();
+        List<Node> result2 = xq.evaluate(rewritten);
+        long t4 = System.currentTimeMillis();
+
+        assertEquals(result1.size(), result2.size());
+        System.out.printf("nested loop join time: %d\n", t2 - t1);
+        System.out.printf("hash join time: %d\n", t4 - t3);
+    }
+
+    @Test
+    void m3test5() throws Exception {
+        String query;
+        Xquery xq = new Xquery();
+
+        query = """
+                for $a in doc("j_caesar.xml")//ACT,
+                              $b in doc("j_caesar.xml")//ACT,
+                              $c in doc("j_caesar.xml")//ACT,
+                              $d in doc("j_caesar.xml")//ACT,
+                              $sa in $a//SCENE,
+                              $sb in $b//SCENE,
+                              $sc in $c//SCENE,
+                              $sd in $d//SCENE,
+                              $spa in $sa//SPEAKER,
+                              $spb in $sb//SPEAKER/text(),
+                              $spc in $sc//SPEAKER,
+                              $spd in $sd//SPEAKER/text(),
+                              $spea in $sa//SPEECH,
+                              $speb in $sb//SPEECH,
+                              $spec in $sc//SPEECH,
+                              $sped in $sd//SPEECH
+                          where $spb="FLAVIUS" and $spd="FLAVIUS" and $sb eq $sc and $sa eq $sd and $spa eq $spc and $speb eq $spec and $spea eq $sped
+                          return <result>{ <title>{$sa/TITLE/text()}</title> }</result>
+                          
+                """;
+        long t1 = System.currentTimeMillis();
+        List<Node> result1 = xq.evaluate(query);
+        long t2 = System.currentTimeMillis();
+        System.out.printf("returned results: %d\n", result1.size());
+
+        String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
+        String expected = """
+                for $tuple in join (join (join (for $a in doc("j_caesar.xml")//ACT,
+                $sa in $a//SCENE,
+                $spa in $sa//SPEAKER,
+                $spea in $sa//SPEECH
+                return <tuple>{
+                <a>{$a}</a>,
+                <sa>{$sa}</sa>,
+                <spa>{$spa}</spa>,
+                <spea>{$spea}</spea>
+                }</tuple>,
+                for $c in doc("j_caesar.xml")//ACT,
+                $sc in $c//SCENE,
+                $spc in $sc//SPEAKER,
+                $spec in $sc//SPEECH
+                return <tuple>{
+                <c>{$c}</c>,
+                <sc>{$sc}</sc>,
+                <spc>{$spc}</spc>,
+                <spec>{$spec}</spec>
+                }</tuple>,
+                [spa], [spc]
+                ),
+                for $d in doc("j_caesar.xml")//ACT,
+                $sd in $d//SCENE,
+                $spd in $sd//SPEAKER/text(),
+                $sped in $sd//SPEECH
+                where $spd eq "FLAVIUS"
+                return <tuple>{
+                <d>{$d}</d>,
+                <sd>{$sd}</sd>,
+                <spd>{$spd}</spd>,
+                <sped>{$sped}</sped>
+                }</tuple>,
+                [sa,spea], [sd,sped]
+                ),
+                for $b in doc("j_caesar.xml")//ACT,
+                $sb in $b//SCENE,
+                $spb in $sb//SPEAKER/text(),
+                $speb in $sb//SPEECH
+                where $spb eq "FLAVIUS"
+                return <tuple>{
+                <b>{$b}</b>,
+                <sb>{$sb}</sb>,
+                <spb>{$spb}</spb>,
+                <speb>{$speb}</speb>
+                }</tuple>,
+                [sc,spec], [sb,speb]
+                )
+                return
+                <result>{<title>{$tuple/sa/*/TITLE/text()}</title>}</result>""";
+        assertEquals(expected, rewritten);
+        long t3 = System.currentTimeMillis();
+        List<Node> result2 = xq.evaluate(rewritten);
+        long t4 = System.currentTimeMillis();
+
+        assertEquals(result1.size(), result2.size());
+        System.out.printf("nested loop join time: %d\n", t2 - t1);
+        System.out.printf("hash join time: %d\n", t4 - t3);
+    }
+
+    @Test
+    void m3test6() throws Exception {
         String query;
         Xquery xq = new Xquery();
 
@@ -597,10 +965,10 @@ class ReWriterTest {
                 <act4>{$a4/TITLE/text()}</act4>
                 }</result>
                 """;
-//        long t1 = System.currentTimeMillis();
-//        List<Node> result1 = xq.evaluate(query);
-//        long t2 = System.currentTimeMillis();
-//        System.out.printf("returned results: %d\n", result1.size());
+        long t1 = System.currentTimeMillis();
+        List<Node> result1 = xq.evaluate(query);
+        long t2 = System.currentTimeMillis();
+        System.out.printf("returned results: %d\n", result1.size());
 
         String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
         String expected = """
@@ -646,12 +1014,12 @@ class ReWriterTest {
                 return
                 <result>{<speaker>{$tuple/sp1/*}</speaker>,<scene>{$tuple/sc1/*/TITLE/text()}</scene>,<act1>{$tuple/a1/*/TITLE/text()}</act1>,<act2>{$tuple/a2/*/TITLE/text()}</act2>,<act3>{$tuple/a3/*/TITLE/text()}</act3>,<act4>{$tuple/a4/*/TITLE/text()}</act4>}</result>""";
         assertEquals(expected, rewritten);
-//        long t3 = System.currentTimeMillis();
-//        List<Node> result2 = xq.evaluate(rewritten);
-//        long t4 = System.currentTimeMillis();
-//
-//        assertEquals(result1.size(), result2.size());
-//        System.out.printf("nested loop join time: %d\n", t2 - t1);
-//        System.out.printf("hash join time: %d\n", t4 - t3);
+        long t3 = System.currentTimeMillis();
+        List<Node> result2 = xq.evaluate(rewritten);
+        long t4 = System.currentTimeMillis();
+
+        assertEquals(result1.size(), result2.size());
+        System.out.printf("nested loop join time: %d\n", t2 - t1);
+        System.out.printf("hash join time: %d\n", t4 - t3);
     }
 }
