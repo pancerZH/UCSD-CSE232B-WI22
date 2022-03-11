@@ -67,11 +67,11 @@ public class Milestone2Test {
 
         System.out.println("Test testcase3:");
         query = """
-                for $act in doc("j_caesar_M3.xml")//ACT,
+                for $act in doc("j_caesar.xml")//ACT,
                     $title in $act/SCENE/TITLE,
                     $speaker1 in $act//SPEAKER/text(),
                     $speaker2 in $act//SPEAKER/text(),
-                    $pg in doc("j_caesar_M3.xml")//PGROUP,
+                    $pg in doc("j_caesar.xml")//PGROUP,
                     $persona1 in $pg/PERSONA/text(),
                     $persona2 in $pg/PERSONA/text()
                 where $speaker1 eq $persona1 and $speaker2 eq $persona2
@@ -89,14 +89,14 @@ public class Milestone2Test {
         query = """
                 for $tuple in
                  join(
-                for  $a1 in doc("j_caesar_M3.xml")//ACT/..//ACT,
+                for  $a1 in doc("j_caesar.xml")//ACT/..//ACT,
                       $sc1 in $a1//SCENE,
                       $sp1 in $sc1//SPEAKER/text(),
                       $sl1 in $sc1//LINE
                             where $sp1 = "FLAVIUS"
                 return <tuple> {<sl1>{$sl1}</sl1>,<sc1>{$sc1}</sc1>} </tuple>,
                 for
-                    $a2 in doc("j_caesar_M3.xml")//ACT/..//ACT,
+                    $a2 in doc("j_caesar.xml")//ACT/..//ACT,
                     $sc2 in $a2//SCENE,
                                 $sp2 in $sc2//SPEAKER,
                                 $sl2 in $sc2//LINE
@@ -109,8 +109,8 @@ public class Milestone2Test {
 
         System.out.println("Test testcase5:");
         query = """
-                for $a in doc("j_caesar_M3.xml")//ACT,
-                    $b in doc("j_caesar_M3.xml")//ACT,
+                for $a in doc("j_caesar.xml")//ACT,
+                    $b in doc("j_caesar.xml")//ACT,
                     $sa in $a//SCENE,
                     $sb in $b//SCENE,
                     $spa in $sa//SPEAKER,

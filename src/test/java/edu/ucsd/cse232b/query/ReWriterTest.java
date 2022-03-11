@@ -503,8 +503,8 @@ class ReWriterTest {
         Xquery xq = new Xquery();
 
         query = """
-                for $q1 in doc("j_caesar_M3.xml")//ACT,
-                  $q2 in doc("j_caesar_M3.xml")//ACT,
+                for $q1 in doc("j_caesar.xml")//ACT,
+                  $q2 in doc("j_caesar.xml")//ACT,
                   $sa in $q1//SCENE,
                   $sb in $q2//SCENE,
                   $spa in $sa//SPEAKER,
@@ -524,7 +524,7 @@ class ReWriterTest {
 
         String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
         String expected = """
-                for $tuple in join (for $q1 in doc("j_caesar_M3.xml")//ACT,
+                for $tuple in join (for $q1 in doc("j_caesar.xml")//ACT,
                 $sa in $q1//SCENE,
                 $spa in $sa//SPEAKER,
                 $spb in $sa//SPEAKER/text(),
@@ -539,7 +539,7 @@ class ReWriterTest {
                 <spea>{$spea}</spea>,
                 <spec>{$spec}</spec>
                 }</tuple>,
-                for $q2 in doc("j_caesar_M3.xml")//ACT,
+                for $q2 in doc("j_caesar.xml")//ACT,
                 $sb in $q2//SCENE,
                 $spc in $sb//SPEAKER,
                 $spd in $sb//SPEAKER/text(),
@@ -574,10 +574,10 @@ class ReWriterTest {
         Xquery xq = new Xquery();
 
         query = """
-                for $a1 in doc("j_caesar_M3.xml")//ACT,
-                $a2 in doc("j_caesar_M3.xml")//ACT,
-                $a3 in doc("j_caesar_M3.xml")//ACT,
-                $a4 in doc("j_caesar_M3.xml")//ACT,
+                for $a1 in doc("j_caesar.xml")//ACT,
+                $a2 in doc("j_caesar.xml")//ACT,
+                $a3 in doc("j_caesar.xml")//ACT,
+                $a4 in doc("j_caesar.xml")//ACT,
                 $sc1 in $a1//SCENE,
                 $sc2 in $a2//SCENE,
                 $sc3 in $a3//SCENE,
@@ -604,7 +604,7 @@ class ReWriterTest {
 
         String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
         String expected = """
-                for $tuple in join (join (join (for $a1 in doc("j_caesar_M3.xml")//ACT,
+                for $tuple in join (join (join (for $a1 in doc("j_caesar.xml")//ACT,
                 $sc1 in $a1//SCENE,
                 $sp1 in $sc1//SPEAKER/text()
                 where $sp1 eq "FLAVIUS"
@@ -613,7 +613,7 @@ class ReWriterTest {
                 <sc1>{$sc1}</sc1>,
                 <sp1>{$sp1}</sp1>
                 }</tuple>,
-                for $a2 in doc("j_caesar_M3.xml")//ACT,
+                for $a2 in doc("j_caesar.xml")//ACT,
                 $sc2 in $a2//SCENE,
                 $sp2 in $sc2//SPEAKER/text()
                 return <tuple>{
@@ -623,7 +623,7 @@ class ReWriterTest {
                 }</tuple>,
                 [sp1,sc1], [sp2,sc2]
                 ),
-                for $a3 in doc("j_caesar_M3.xml")//ACT,
+                for $a3 in doc("j_caesar.xml")//ACT,
                 $sc3 in $a3//SCENE,
                 $sp3 in $sc3//SPEAKER/text()
                 return <tuple>{
@@ -633,7 +633,7 @@ class ReWriterTest {
                 }</tuple>,
                 [sp2,sc2], [sp3,sc3]
                 ),
-                for $a4 in doc("j_caesar_M3.xml")//ACT,
+                for $a4 in doc("j_caesar.xml")//ACT,
                 $sc4 in $a4//SCENE,
                 $sp4 in $sc4//SPEAKER/text()
                 return <tuple>{

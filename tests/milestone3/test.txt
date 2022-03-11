@@ -2,11 +2,11 @@
 original:
 
 for
-    $act in doc("j_caesar_M3.xml")//ACT,
+    $act in doc("j_caesar.xml")//ACT,
     $title in $act/SCENE/TITLE,
     $speaker1 in $act//SPEAKER/text(),
     $speaker2 in $act//SPEAKER/text(),
-    $pg in doc("j_caesar_M3.xml")//PGROUP,
+    $pg in doc("j_caesar.xml")//PGROUP,
     $persona1 in $pg/PERSONA/text(),
     $persona2 in $pg/PERSONA/text()
 
@@ -22,7 +22,7 @@ return
 
 rewrite:
 
-for $tuple in join (for $act in doc("j_caesar_M3.xml")//ACT,
+for $tuple in join (for $act in doc("j_caesar.xml")//ACT,
 $title in $act/SCENE/TITLE,
 $speaker1 in $act//SPEAKER/text(),
 $speaker2 in $act//SPEAKER/text()
@@ -32,7 +32,7 @@ return <tuple>{
 <speaker1>{$speaker1}</speaker1>,
 <speaker2>{$speaker2}</speaker2>
 }</tuple>,
-for $pg in doc("j_caesar_M3.xml")//PGROUP,
+for $pg in doc("j_caesar.xml")//PGROUP,
 $persona1 in $pg/PERSONA/text(),
 $persona2 in $pg/PERSONA/text()
 return <tuple>{
@@ -49,8 +49,8 @@ return
 2.
 original:
 
-for $a in doc("j_caesar_M3.xml")//ACT,
-    $b in doc("j_caesar_M3.xml")//ACT,
+for $a in doc("j_caesar.xml")//ACT,
+    $b in doc("j_caesar.xml")//ACT,
     $sa in $a//SCENE,
     $sb in $b//SCENE,
     $spa in $sa//SPEAKER,
@@ -64,7 +64,7 @@ return <result>{ <title>{$sa/TITLE/text()}</title> }</result>
 
 rewrite:
 
-for $tuple in join (for $a in doc("j_caesar_M3.xml")//ACT,
+for $tuple in join (for $a in doc("j_caesar.xml")//ACT,
 $sa in $a//SCENE,
 $spa in $sa//SPEAKER
 return <tuple>{
@@ -72,7 +72,7 @@ return <tuple>{
 <sa>{$sa}</sa>,
 <spa>{$spa}</spa>
 }</tuple>,
-for $b in doc("j_caesar_M3.xml")//ACT,
+for $b in doc("j_caesar.xml")//ACT,
 $sb in $b//SCENE,
 $spb in $sb//SPEAKER/text(),
 $spc in $sb//SPEAKER
@@ -90,8 +90,8 @@ return
 
 3.
 original:
-for $q1 in doc("j_caesar_M3.xml")//ACT,
-  $q2 in doc("j_caesar_M3.xml")//ACT,
+for $q1 in doc("j_caesar.xml")//ACT,
+  $q2 in doc("j_caesar.xml")//ACT,
   $sa in $q1//SCENE,
   $sb in $q2//SCENE,
   $spa in $sa//SPEAKER,
@@ -110,7 +110,7 @@ return <result>{ <title>{$sa/TITLE/text()}</title>, <speaker>{$spa/text()}</spea
 
 rewrite:
 
-for $tuple in join (for $q1 in doc("j_caesar_M3.xml")//ACT,
+for $tuple in join (for $q1 in doc("j_caesar.xml")//ACT,
 $sa in $q1//SCENE,
 $spa in $sa//SPEAKER,
 $spb in $sa//SPEAKER/text(),
@@ -125,7 +125,7 @@ return <tuple>{
 <spea>{$spea}</spea>,
 <spec>{$spec}</spec>
 }</tuple>,
-for $q2 in doc("j_caesar_M3.xml")//ACT,
+for $q2 in doc("j_caesar.xml")//ACT,
 $sb in $q2//SCENE,
 $spc in $sb//SPEAKER,
 $spd in $sb//SPEAKER/text(),
@@ -148,10 +148,10 @@ return
 4. 
 orignal:
 
-for $a in doc("j_caesar_M3.xml")//ACT,
-    $b in doc("j_caesar_M3.xml")//ACT,
-    $c in doc("j_caesar_M3.xml")//ACT,
-    $d in doc("j_caesar_M3.xml")//ACT,
+for $a in doc("j_caesar.xml")//ACT,
+    $b in doc("j_caesar.xml")//ACT,
+    $c in doc("j_caesar.xml")//ACT,
+    $d in doc("j_caesar.xml")//ACT,
     $sa in $a//SCENE,
     $sb in $b//SCENE,
     $sc in $c//SCENE,
@@ -166,7 +166,7 @@ return <result>{ <title>{$sa/TITLE/text()}</title> }</result>
 
 rewrite:
 
-for $tuple in join (join (join (for $a in doc("j_caesar_M3.xml")//ACT,
+for $tuple in join (join (join (for $a in doc("j_caesar.xml")//ACT,
 $sa in $a//SCENE,
 $spa in $sa//SPEAKER
 return <tuple>{
@@ -174,7 +174,7 @@ return <tuple>{
 <sa>{$sa}</sa>,
 <spa>{$spa}</spa>
 }</tuple>,
-for $c in doc("j_caesar_M3.xml")//ACT,
+for $c in doc("j_caesar.xml")//ACT,
 $sc in $c//SCENE,
 $spc in $sc//SPEAKER
 return <tuple>{
@@ -184,7 +184,7 @@ return <tuple>{
 }</tuple>,
 [spa], [spc]
 ),
-for $d in doc("j_caesar_M3.xml")//ACT,
+for $d in doc("j_caesar.xml")//ACT,
 $sd in $d//SCENE,
 $spd in $sd//SPEAKER
 return <tuple>{
@@ -194,7 +194,7 @@ return <tuple>{
 }</tuple>,
 [sa], [sd]
 ),
-for $b in doc("j_caesar_M3.xml")//ACT,
+for $b in doc("j_caesar.xml")//ACT,
 $sb in $b//SCENE,
 $spb in $sb//SPEAKER/text()
 where $spb eq "FLAVIUS"
@@ -211,10 +211,10 @@ return
 5.
 original:
 
-for $a in doc("j_caesar_M3.xml")//ACT,
-    $b in doc("j_caesar_M3.xml")//ACT,
-    $c in doc("j_caesar_M3.xml")//ACT,
-    $d in doc("j_caesar_M3.xml")//ACT,
+for $a in doc("j_caesar.xml")//ACT,
+    $b in doc("j_caesar.xml")//ACT,
+    $c in doc("j_caesar.xml")//ACT,
+    $d in doc("j_caesar.xml")//ACT,
     $sa in $a//SCENE,
     $sb in $b//SCENE,
     $sc in $c//SCENE,
@@ -233,7 +233,7 @@ return <result>{ <title>{$sa/TITLE/text()}</title> }</result>
 
 rewrite:
 
-for $tuple in join (join (join (for $a in doc("j_caesar_M3.xml")//ACT,
+for $tuple in join (join (join (for $a in doc("j_caesar.xml")//ACT,
 $sa in $a//SCENE,
 $spa in $sa//SPEAKER,
 $spea in $sa//SPEECH
@@ -243,7 +243,7 @@ return <tuple>{
 <spa>{$spa}</spa>,
 <spea>{$spea}</spea>
 }</tuple>,
-for $c in doc("j_caesar_M3.xml")//ACT,
+for $c in doc("j_caesar.xml")//ACT,
 $sc in $c//SCENE,
 $spc in $sc//SPEAKER,
 $spec in $sc//SPEECH
@@ -255,7 +255,7 @@ return <tuple>{
 }</tuple>,
 [spa], [spc]
 ),
-for $d in doc("j_caesar_M3.xml")//ACT,
+for $d in doc("j_caesar.xml")//ACT,
 $sd in $d//SCENE,
 $spd in $sd//SPEAKER/text(),
 $sped in $sd//SPEECH
@@ -268,7 +268,7 @@ return <tuple>{
 }</tuple>,
 [sa,spea], [sd,sped]
 ),
-for $b in doc("j_caesar_M3.xml")//ACT,
+for $b in doc("j_caesar.xml")//ACT,
 $sb in $b//SCENE,
 $spb in $sb//SPEAKER/text(),
 $speb in $sb//SPEECH
