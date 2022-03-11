@@ -1,9 +1,316 @@
-for $a in doc("j_caesar.xml")//ACT,
-                    $b in doc("j_caesar.xml")//ACT,
-                    $sa in $a//SCENE,
-                    $sb in $b//SCENE,
-                    $spa in $sa//SPEAKER,
-                    $spb in $sb//SPEAKER/text(),
-                    $spc in $sb//SPEAKER
-                where $spb="FLAVIUS" and $sa eq $sb and $spa eq $spc
-                return <result>{ <title>{$sa/TITLE/text()}</title> }</result>
+1.
+original:
+
+for
+    $act in doc("j_caesar_M3.xml")//ACT,
+    $title in $act/SCENE/TITLE,
+    $speaker1 in $act//SPEAKER/text(),
+    $speaker2 in $act//SPEAKER/text(),
+    $pg in doc("j_caesar_M3.xml")//PGROUP,
+    $persona1 in $pg/PERSONA/text(),
+    $persona2 in $pg/PERSONA/text()
+
+where $speaker1 eq $persona1 and $speaker2 eq $persona2
+
+return
+    <tuple>{
+        <scene>{$title/text()}</scene>,
+        <persona1>{$persona1}</persona1>,
+        <persona2>{$persona2}</persona2>
+    }</tuple>
+
+
+rewrite:
+
+for $tuple in join (for $act in doc("j_caesar_M3.xml")//ACT,
+$title in $act/SCENE/TITLE,
+$speaker1 in $act//SPEAKER/text(),
+$speaker2 in $act//SPEAKER/text()
+return <tuple>{
+<act>{$act}</act>,
+<title>{$title}</title>,
+<speaker1>{$speaker1}</speaker1>,
+<speaker2>{$speaker2}</speaker2>
+}</tuple>,
+for $pg in doc("j_caesar_M3.xml")//PGROUP,
+$persona1 in $pg/PERSONA/text(),
+$persona2 in $pg/PERSONA/text()
+return <tuple>{
+<pg>{$pg}</pg>,
+<persona1>{$persona1}</persona1>,
+<persona2>{$persona2}</persona2>
+}</tuple>,
+[speaker2,speaker1], [persona2,persona1]
+)
+return
+<tuple>{<scene>{$tuple/title/*/text()}</scene>,<persona1>{$tuple/persona1/*}</persona1>,<persona2>{$tuple/persona2/*}</persona2>}</tuple>
+
+
+2.
+original:
+
+for $a in doc("j_caesar_M3.xml")//ACT,
+    $b in doc("j_caesar_M3.xml")//ACT,
+    $sa in $a//SCENE,
+    $sb in $b//SCENE,
+    $spa in $sa//SPEAKER,
+    $spb in $sb//SPEAKER/text(),
+    $spc in $sb//SPEAKER
+
+where $spb="FLAVIUS" and $sa eq $sb and $spa eq $spc
+
+return <result>{ <title>{$sa/TITLE/text()}</title> }</result>
+
+
+rewrite:
+
+for $tuple in join (for $a in doc("j_caesar_M3.xml")//ACT,
+$sa in $a//SCENE,
+$spa in $sa//SPEAKER
+return <tuple>{
+<a>{$a}</a>,
+<sa>{$sa}</sa>,
+<spa>{$spa}</spa>
+}</tuple>,
+for $b in doc("j_caesar_M3.xml")//ACT,
+$sb in $b//SCENE,
+$spb in $sb//SPEAKER/text(),
+$spc in $sb//SPEAKER
+where $spb eq "FLAVIUS"
+return <tuple>{
+<b>{$b}</b>,
+<sb>{$sb}</sb>,
+<spb>{$spb}</spb>,
+<spc>{$spc}</spc>
+}</tuple>,
+[sa,spa], [sb,spc]
+)
+return
+<result>{<title>{$tuple/sa/*/TITLE/text()}</title>}</result>
+
+3.
+original:
+for $q1 in doc("j_caesar_M3.xml")//ACT,
+  $q2 in doc("j_caesar_M3.xml")//ACT,
+  $sa in $q1//SCENE,
+  $sb in $q2//SCENE,
+  $spa in $sa//SPEAKER,
+  $spb in $sa//SPEAKER/text(),
+  $spc in $sb//SPEAKER,
+  $spd in $sb//SPEAKER/text(),
+  $spea in $sa//SPEECH,
+  $speb in $sb//SPEECH,
+  $spec in $sa//SPEECH,
+  $sped in $sb//SPEECH
+
+
+where $spb="FLAVIUS" and $spd="FLAVIUS" and $sa eq $sb and $spa eq $spc and $speb eq $spec and $spea eq $sped
+
+return <result>{ <title>{$sa/TITLE/text()}</title>, <speaker>{$spa/text()}</speaker> }</result>
+
+rewrite:
+
+for $tuple in join (for $q1 in doc("j_caesar_M3.xml")//ACT,
+$sa in $q1//SCENE,
+$spa in $sa//SPEAKER,
+$spb in $sa//SPEAKER/text(),
+$spea in $sa//SPEECH,
+$spec in $sa//SPEECH
+where $spb eq "FLAVIUS"
+return <tuple>{
+<q1>{$q1}</q1>,
+<sa>{$sa}</sa>,
+<spa>{$spa}</spa>,
+<spb>{$spb}</spb>,
+<spea>{$spea}</spea>,
+<spec>{$spec}</spec>
+}</tuple>,
+for $q2 in doc("j_caesar_M3.xml")//ACT,
+$sb in $q2//SCENE,
+$spc in $sb//SPEAKER,
+$spd in $sb//SPEAKER/text(),
+$speb in $sb//SPEECH,
+$sped in $sb//SPEECH
+where $spd eq "FLAVIUS"
+return <tuple>{
+<q2>{$q2}</q2>,
+<sb>{$sb}</sb>,
+<spc>{$spc}</spc>,
+<spd>{$spd}</spd>,
+<speb>{$speb}</speb>,
+<sped>{$sped}</sped>
+}</tuple>,
+[sa,spa,spea,spec], [sb,spc,sped,speb]
+)
+return
+<result>{<title>{$tuple/sa/*/TITLE/text()}</title>,<speaker>{$tuple/spa/*/text()}</speaker>}</result>
+
+4. 
+orignal:
+
+for $a in doc("j_caesar_M3.xml")//ACT,
+    $b in doc("j_caesar_M3.xml")//ACT,
+    $c in doc("j_caesar_M3.xml")//ACT,
+    $d in doc("j_caesar_M3.xml")//ACT,
+    $sa in $a//SCENE,
+    $sb in $b//SCENE,
+    $sc in $c//SCENE,
+    $sd in $d//SCENE,
+    $spa in $sa//SPEAKER,
+    $spb in $sb//SPEAKER/text(),
+    $spc in $sc//SPEAKER,
+    $spd in $sd//SPEAKER
+where $spb="FLAVIUS" and $sb eq $sc and $sa eq $sd and $spa eq $spc
+return <result>{ <title>{$sa/TITLE/text()}</title> }</result>
+
+
+rewrite:
+
+for $tuple in join (join (join (for $a in doc("j_caesar_M3.xml")//ACT,
+$sa in $a//SCENE,
+$spa in $sa//SPEAKER
+return <tuple>{
+<a>{$a}</a>,
+<sa>{$sa}</sa>,
+<spa>{$spa}</spa>
+}</tuple>,
+for $c in doc("j_caesar_M3.xml")//ACT,
+$sc in $c//SCENE,
+$spc in $sc//SPEAKER
+return <tuple>{
+<c>{$c}</c>,
+<sc>{$sc}</sc>,
+<spc>{$spc}</spc>
+}</tuple>,
+[spa], [spc]
+),
+for $d in doc("j_caesar_M3.xml")//ACT,
+$sd in $d//SCENE,
+$spd in $sd//SPEAKER
+return <tuple>{
+<d>{$d}</d>,
+<sd>{$sd}</sd>,
+<spd>{$spd}</spd>
+}</tuple>,
+[sa], [sd]
+),
+for $b in doc("j_caesar_M3.xml")//ACT,
+$sb in $b//SCENE,
+$spb in $sb//SPEAKER/text()
+where $spb eq "FLAVIUS"
+return <tuple>{
+<b>{$b}</b>,
+<sb>{$sb}</sb>,
+<spb>{$spb}</spb>
+}</tuple>,
+[sc], [sb]
+)
+return
+<result>{<title>{$tuple/sa/*/TITLE/text()}</title>}</result>
+
+5.
+original:
+
+for $a in doc("j_caesar_M3.xml")//ACT,
+    $b in doc("j_caesar_M3.xml")//ACT,
+    $c in doc("j_caesar_M3.xml")//ACT,
+    $d in doc("j_caesar_M3.xml")//ACT,
+    $sa in $a//SCENE,
+    $sb in $b//SCENE,
+    $sc in $c//SCENE,
+    $sd in $d//SCENE,
+    $spa in $sa//SPEAKER,
+    $spb in $sb//SPEAKER/text(),
+    $spc in $sc//SPEAKER,
+    $spd in $sd//SPEAKER/text(),
+    $spea in $sa//SPEECH,
+    $speb in $sb//SPEECH,
+    $spec in $sc//SPEECH,
+    $sped in $sd//SPEECH
+where $spb="FLAVIUS" and $spd="FLAVIUS" and $sb eq $sc and $sa eq $sd and $spa eq $spc and $speb eq $spec and $spea eq $sped
+return <result>{ <title>{$sa/TITLE/text()}</title> }</result>
+
+
+rewrite:
+
+for $tuple in join (join (join (for $a in doc("j_caesar_M3.xml")//ACT,
+$sa in $a//SCENE,
+$spa in $sa//SPEAKER,
+$spea in $sa//SPEECH
+return <tuple>{
+<a>{$a}</a>,
+<sa>{$sa}</sa>,
+<spa>{$spa}</spa>,
+<spea>{$spea}</spea>
+}</tuple>,
+for $c in doc("j_caesar_M3.xml")//ACT,
+$sc in $c//SCENE,
+$spc in $sc//SPEAKER,
+$spec in $sc//SPEECH
+return <tuple>{
+<c>{$c}</c>,
+<sc>{$sc}</sc>,
+<spc>{$spc}</spc>,
+<spec>{$spec}</spec>
+}</tuple>,
+[spa], [spc]
+),
+for $d in doc("j_caesar_M3.xml")//ACT,
+$sd in $d//SCENE,
+$spd in $sd//SPEAKER/text(),
+$sped in $sd//SPEECH
+where $spd eq "FLAVIUS"
+return <tuple>{
+<d>{$d}</d>,
+<sd>{$sd}</sd>,
+<spd>{$spd}</spd>,
+<sped>{$sped}</sped>
+}</tuple>,
+[sa,spea], [sd,sped]
+),
+for $b in doc("j_caesar_M3.xml")//ACT,
+$sb in $b//SCENE,
+$spb in $sb//SPEAKER/text(),
+$speb in $sb//SPEECH
+where $spb eq "FLAVIUS"
+return <tuple>{
+<b>{$b}</b>,
+<sb>{$sb}</sb>,
+<spb>{$spb}</spb>,
+<speb>{$speb}</speb>
+}</tuple>,
+[sc,spec], [sb,speb]
+)
+return
+<result>{<title>{$tuple/sa/*/TITLE/text()}</title>}</result>
+
+6. 
+original:
+
+for $a1 in doc("j_caesar.xml")//ACT,
+$a2 in doc("j_caesar.xml")//ACT,
+$a3 in doc("j_caesar.xml")//ACT,
+$a4 in doc("j_caesar.xml")//ACT,
+$sc1 in $a1//SCENE,
+$sc2 in $a2//SCENE,
+$sc3 in $a3//SCENE,
+$sc4 in $a4//SCENE,
+$sp4 in $sc4//SPEAKER/text(),
+$sp2 in $sc2//SPEAKER/text(),
+$sp1 in $sc1//SPEAKER/text(),
+$sp3 in $sc3//SPEAKER/text()
+where $sp1 = "FLAVIUS" and $sp1 eq $sp2 and $sp2 eq $sp3 and $sp3 eq
+$sp4 and $sc1 eq $sc2 and $sc2 eq $sc3 and $sc3 eq $sc4
+return <result> {
+<speaker>{$sp1}</speaker>,
+<scene>{$sc1/TITLE/text()}</scene>,
+<act1>{$a1/TITLE/text()}</act1>,
+<act2>{$a2/TITLE/text()}</act2>,
+<act3>{$a3/TITLE/text()}</act3>,
+<act4>{$a4/TITLE/text()}</act4>
+}</result>
+
+rewrite:
+
+wrong
+

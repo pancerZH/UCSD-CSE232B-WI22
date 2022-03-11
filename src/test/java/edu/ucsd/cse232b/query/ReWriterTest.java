@@ -565,4 +565,91 @@ class ReWriterTest {
         System.out.printf("nested loop join time: %d\n", t2 - t1);
         System.out.printf("hash join time: %d\n", t4 - t3);
     }
+
+    @Test
+    void rewrite1() throws Exception {
+        String query;
+        Xquery xq = new Xquery();
+
+        query = """
+                for $a1 in doc("j_caesar_M3.xml")//ACT,
+                $a2 in doc("j_caesar_M3.xml")//ACT,
+                $a3 in doc("j_caesar_M3.xml")//ACT,
+                $a4 in doc("j_caesar_M3.xml")//ACT,
+                $sc1 in $a1//SCENE,
+                $sc2 in $a2//SCENE,
+                $sc3 in $a3//SCENE,
+                $sc4 in $a4//SCENE,
+                $sp4 in $sc4//SPEAKER/text(),
+                $sp2 in $sc2//SPEAKER/text(),
+                $sp1 in $sc1//SPEAKER/text(),
+                $sp3 in $sc3//SPEAKER/text()
+                where $sp1 = "FLAVIUS" and $sp1 eq $sp2 and $sp2 eq $sp3 and $sp3 eq
+                $sp4 and $sc1 eq $sc2 and $sc2 eq $sc3 and $sc3 eq $sc4
+                return <result> {
+                <speaker>{$sp1}</speaker>,
+                <scene>{$sc1/TITLE/text()}</scene>,
+                <act1>{$a1/TITLE/text()}</act1>,
+                <act2>{$a2/TITLE/text()}</act2>,
+                <act3>{$a3/TITLE/text()}</act3>,
+                <act4>{$a4/TITLE/text()}</act4>
+                }</result>
+                """;
+//        long t1 = System.currentTimeMillis();
+//        List<Node> result1 = xq.evaluate(query);
+//        long t2 = System.currentTimeMillis();
+//        System.out.printf("returned results: %d\n", result1.size());
+
+        String rewritten = ReWriter.convert((QueryGrammarParser.ForXqContext)xq.parse(query).xq());
+        String expected = """
+                for $tuple in join (join (join (for $a1 in doc("j_caesar_M3.xml")//ACT,
+                $sc1 in $a1//SCENE,
+                $sp1 in $sc1//SPEAKER/text()
+                where $sp1 = "FLAVIUS"
+                return <tuple>{
+                <a1>{$a1}</a1>,
+                <sc1>{$sc1}</sc1>,
+                <sp1>{$sp1}</sp1>
+                }</tuple>,
+                for $a2 in doc("j_caesar_M3.xml")//ACT,
+                $sc2 in $a2//SCENE,
+                $sp2 in $sc2//SPEAKER/text()
+                return <tuple>{
+                <a2>{$a2}</a2>,
+                <sc2>{$sc2}</sc2>,
+                <sp2>{$sp2}</sp2>
+                }</tuple>,
+                [sp1,sc1], [sp2,sc2]
+                ),
+                for $a3 in doc("j_caesar_M3.xml")//ACT,
+                $sc3 in $a3//SCENE,
+                $sp3 in $sc3//SPEAKER/text()
+                return <tuple>{
+                <a3>{$a3}</a3>,
+                <sc3>{$sc3}</sc3>,
+                <sp3>{$sp3}</sp3>
+                }</tuple>,
+                [sp2,sc2], [sp3,sc3]
+                ),
+                for $a4 in doc("j_caesar_M3.xml")//ACT,
+                $sc4 in $a4//SCENE,
+                $sp4 in $sc4//SPEAKER/text()
+                return <tuple>{
+                <a4>{$a4}</a4>,
+                <sc4>{$sc4}</sc4>,
+                <sp4>{$sp4}</sp4>
+                }</tuple>,
+                [sp3,sc3], [sp4,sc4]
+                )
+                return
+                <result>{<speaker>{$tuple/sp1/*}</speaker>,<scene>{$tuple/sc1/*/TITLE/text()}</scene>,<act1>{$tuple/a1/*/TITLE/text()}</act1>,<act2>{$tuple/a2/*/TITLE/text()}</act2>,<act3>{$tuple/a3/*/TITLE/text()}</act3>,<act4>{$tuple/a4/*/TITLE/text()}</act4>}</result>""";
+        assertEquals(expected, rewritten);
+//        long t3 = System.currentTimeMillis();
+//        List<Node> result2 = xq.evaluate(rewritten);
+//        long t4 = System.currentTimeMillis();
+//
+//        assertEquals(result1.size(), result2.size());
+//        System.out.printf("nested loop join time: %d\n", t2 - t1);
+//        System.out.printf("hash join time: %d\n", t4 - t3);
+    }
 }
